@@ -1,17 +1,7 @@
-.PHONY: model build
-
-# check for git submodules
-# ifneq ($(findstring -, $(shell git submodule status)),)
-# $(info INFO: Initializing submodules)
-# $(shell git submodule update --init)
-# endif
-# ifneq ($(findstring +, $(shell git submodule status)),)
-# $(info INFO: New updates in submodules, reinitializing...)
-# $(shell git submodule update --init)
-# endif
+.PHONY: model
 
 setup:
-	mkdir video data
+	mkdir data
 
 test:
 	python -B ./src/test.py
