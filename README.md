@@ -2,6 +2,7 @@
 ## TODO
 * self-supervised learning multimodal pipeline 
   * https://arxiv.org/pdf/2304.01008.pdf
+  * Matching prediction between pose and motion sensor data
 
 ## Usage
 * `make test` to test different configurations specify in `src/test.py`
