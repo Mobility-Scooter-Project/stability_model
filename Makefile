@@ -9,20 +9,6 @@ test:
 train:
 	python -B ./src/train.py
 
-# If the first argument is "model"
-ifeq (model,$(firstword $(MAKECMDGOALS)))
-  MODELFILE := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  $(eval $(MODELFILE):;@:)
-endif
-model:
-	python -B ./src/nn/$(MODELFILE).py
-
-label:
-	python -B ./GUI.py
-
-record:
-	python -B ./src/record_video.py
-
 black:
 	black ./
 
