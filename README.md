@@ -2,6 +2,8 @@
 ## TODO
 * self-supervised learning multimodal pipeline 
   * https://arxiv.org/pdf/2304.01008.pdf
+    * pseudo-label
+    * loss function
   
 
 ## Usage
