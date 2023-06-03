@@ -1,40 +1,36 @@
 from nn.lstm import LSTM
 from nn.encoder_decoder import Encoder_Decoder
 from preprocessor import StableFilter, UnstableFilter
-from mutils import ModelTrain, split_data
+from mutils import ModelTrain, split_data, get_filenames
 
-DATA = [
-    "SideView_1.mp4",
-    "SideView_2.mp4",
-    "SideView_3.mp4",
-    "FrontView_1.mp4",
-    "FrontView_2.mp4",
-    "FrontView_3.mp4",
-]
+DATA = get_filenames("data")
 
 OPTIONS = {
-    "preprocess": [StableFilter(stable_label=0, padding=30)],
-    "batchsize": [40],
-    "timestamp": [16],
-    "optimizer": ["adam"],
-    "layer1": [{"units": i*5} for i in range(1, 10)],
+    "preprocess": StableFilter(stable_label=0, padding=30),
+    "batchsize": 40,
+    "timestamp": 16,
+    "optimizer": "adam",
 }
 
-MAX_EPOCHS = 200
+MAX_EPOCHS = 30
+
+number_of_test_file = 4
+stable_test_data = StableFilter(stable_label=0, padding=30).transform(split_data(DATA[:number_of_test_file], 0, 0)[0])
+unstable_test_data = UnstableFilter(stable_label=0, padding=10).transform(split_data(DATA[:number_of_test_file], 0, 0)[0])
 
 SETTINGS = {
-    "max_epochs":200,
+    "max_epochs":MAX_EPOCHS,
     "valid_ratio":0.3,
     "test_ratio":0,
-    "early_stop_valid_patience":20,
-    "early_stop_train_patience":20,
+    "early_stop_valid_patience":MAX_EPOCHS//10,
+    "early_stop_train_patience":MAX_EPOCHS//10,
     "num_train_per_config":10,
     "loss":'mae',
     "metrics": ['mae'],
     # "loss":"sparse_categorical_crossentropy",
     # "metrics": ['accuracy'],
     "verbose": 1,
-    "test_data": [UnstableFilter(stable_label=0, padding=10).transform(split_data([DATA[5]], 0, 0)[0]), StableFilter(stable_label=0, padding=30).transform(split_data([DATA[5]], 0, 0)[0])]
+    "test_data": [unstable_test_data, stable_test_data]
 }
 
-ModelTrain(Encoder_Decoder, DATA, OPTIONS, **SETTINGS).run()
+ModelTrain(Encoder_Decoder, DATA[number_of_test_file:], OPTIONS, **SETTINGS).run()

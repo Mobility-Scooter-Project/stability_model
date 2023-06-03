@@ -1,0 +1,21 @@
+average unstable loss vs. average stable loss: [0.030817272141575813, 0.024192586541175842]
+
+batchsize: 40
+timestamp: 16
+optimizer: adam
+preprocess: Stable Filter
+
+SETTINGS = {
+    "max_epochs":MAX_EPOCHS,
+    "valid_ratio":0.3,
+    "test_ratio":0,
+    "early_stop_valid_patience":MAX_EPOCHS//10,
+    "early_stop_train_patience":MAX_EPOCHS//10,
+    "num_train_per_config":10,
+    "loss":'mae',
+    "metrics": ['mae'],
+    # "loss":"sparse_categorical_crossentropy",
+    # "metrics": ['accuracy'],
+    "verbose": 1,
+    "test_data": [unstable_test_data, stable_test_data]
+}

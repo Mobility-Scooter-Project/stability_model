@@ -15,6 +15,9 @@ labels2int = {b: a for a, b in enumerate(settings["labels"])}
 landmark_indices = [0, 11, 12, 13, 14, 15, 16, 23, 24]
 
 
+def get_filenames(folder_path):
+    return list(map(lambda y: os.path.join(folder_path, y), filter(lambda x: x[-4:]=='.csv', os.listdir(folder_path))))
+
 # convert landmarks to only selected landmarks
 def convert(landmarks):
     result = []
@@ -109,7 +112,7 @@ def split_data_without_label(df, valid_size, test_size):
 
 def split_data(DATA, VALID_RATIO, TEST_RATIO):
     DBs = [
-        pd.read_csv(os.path.join("data", f"{name}.csv"), index_col=0) for name in DATA
+        pd.read_csv(name, index_col=0) for name in DATA
     ]
     DB = pd.concat(DBs, axis=0, ignore_index=True, sort=False)
     DB = convert_df_labels(DB, labels2int)
@@ -136,6 +139,8 @@ def group_data(data, group_size, target_function):
             y_temp = []
 
     return np.array(x_result), np.array(y_result)
+
+
 
 
 class ModelOperation:
@@ -397,3 +402,4 @@ class ModelTrain(ModelOperation):
             # f.write("{:8.0f} {:8.4f} {:8.4f} {:8.4f}\n\n".format(*record))
             [f.write(f'{str(k)}: {str(v)}\n') for k, v in self.params.items()]
         print(f"Model saved to <{model_path}>.")
+
