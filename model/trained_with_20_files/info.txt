@@ -5,6 +5,8 @@ timestamp: 16
 optimizer: adam
 preprocess: Stable Filter
 
+MAX_EPOCHS = 30
+
 SETTINGS = {
     "max_epochs":MAX_EPOCHS,
     "valid_ratio":0.3,
