@@ -4,19 +4,24 @@ from preprocessor import StableFilter, UnstableFilter
 from mutils import ModelTrain, split_data
 
 DATA = [
-    "FrontView_3.mp4",
-    "FrontView_2.mp4",
-    "FrontView_1.mp4",
     "SideView_1.mp4",
     "SideView_2.mp4",
     "SideView_3.mp4",
+    "FrontView_1.mp4",
+    "FrontView_2.mp4",
+    "FrontView_3.mp4",
 ]
+
 OPTIONS = {
-    "preprocess": StableFilter(stable_label=0, padding=30),
-    "batchsize": 40,
-    "timestamp": 16,
-    "optimizer": "adam",
+    "preprocess": [StableFilter(stable_label=0, padding=30)],
+    "batchsize": [40],
+    "timestamp": [16],
+    "optimizer": ["adam"],
+    "layer1": [{"units": i*5} for i in range(1, 10)],
 }
+
+MAX_EPOCHS = 200
+
 SETTINGS = {
     "max_epochs":200,
     "valid_ratio":0.3,
@@ -29,7 +34,7 @@ SETTINGS = {
     # "loss":"sparse_categorical_crossentropy",
     # "metrics": ['accuracy'],
     "verbose": 1,
-    "test_data": UnstableFilter(stable_label=0, padding=6).transform(split_data(DATA, 0, 0)[0])
+    "test_data": [UnstableFilter(stable_label=0, padding=10).transform(split_data([DATA[5]], 0, 0)[0]), StableFilter(stable_label=0, padding=30).transform(split_data([DATA[5]], 0, 0)[0])]
 }
 
 ModelTrain(Encoder_Decoder, DATA, OPTIONS, **SETTINGS).run()
