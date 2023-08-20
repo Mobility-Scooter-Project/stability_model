@@ -4,7 +4,7 @@ from preprocessor import Balancer
 
 
 
-MAX_EPOCHS = 1
+MAX_EPOCHS = 30
 
 DATA = get_filenames("data")
 print(DATA)

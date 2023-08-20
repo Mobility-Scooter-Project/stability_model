@@ -148,7 +148,7 @@ class ModelOperation:
         self,
         model_class,
         data,
-        max_epochs=1,
+        max_epochs=100,
         valid_ratio=0.1,
         test_ratio=0.1,
         early_stop_valid_patience=10,
@@ -280,6 +280,8 @@ class ModelTest(ModelOperation):
 
     def process_options(self):
         self.final_data = list(self.raw_data)
+        print()
+
         self.params = {}
         for i in range(len(self.layer_options)):
             self.layer_options[i] = None
@@ -305,7 +307,9 @@ class ModelTest(ModelOperation):
         pd.DataFrame(
             data=self.history,
             columns=list(next(zip(*self.final_options)))
-            + ["avg_epochs", "avg_loss", "avg_valid_loss"]+ [f"avg_test_loss_{i}" for i in range(len(self.test_data))],
+                + ["avg_epochs", "avg_loss", "avg_valid_loss"]
+                + (["avg_test_loss"] if len(self.raw_data[2][0]) else [])
+                + [f"avg_test_loss_{i}" for i,v in enumerate(self.test_data or [])],
         ).to_csv(output_path)
 
     def test(self, option_idx):
