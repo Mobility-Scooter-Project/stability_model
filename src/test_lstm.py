@@ -7,9 +7,10 @@ from preprocessor import Balancer
 MAX_EPOCHS = 1
 
 DATA = get_filenames("data")
+print(DATA)
 
 OPTIONS = {
-    "preprocess": [Balancer(stable_label=0, padding=30)],
+    "preprocess": [Balancer(100, 50)],
     "batchsize": [40],
     "timestamp": [16],
     "optimizer": ["adam"],

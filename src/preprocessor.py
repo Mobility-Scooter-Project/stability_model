@@ -99,6 +99,7 @@ class Balancer(Preprocessor):
         if len(x_temp):
             x_result.extend(x_temp)
             y_result.extend(y_temp)
+        print(Counter(y_result))
         return x_result, y_result
 
     def __str__(self):

@@ -148,7 +148,7 @@ class ModelOperation:
         self,
         model_class,
         data,
-        max_epochs=100,
+        max_epochs=1,
         valid_ratio=0.1,
         test_ratio=0.1,
         early_stop_valid_patience=10,
@@ -243,7 +243,7 @@ class ModelOperation:
                 ),
             ],
             verbose=self.verbose,
-            shuffle=False,
+            shuffle=True,
         )
         self.epochs_record = history.history
         epochs = len(history.history["loss"])
