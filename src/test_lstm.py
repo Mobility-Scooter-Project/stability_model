@@ -11,10 +11,10 @@ print(DATA)
 
 OPTIONS = {
     "preprocess": [Balancer(100, 50)],
-    "batchsize": [40],
-    "timestamp": [16],
+    "batchsize": [40*i for i in range(1, 5) ],
+    "timestamp": [16*i for i in range(1, 10)],
     "optimizer": ["adam"],
-    "layer1": [{"units": i*5} for i in range(1, 10)],
+    "layer1": [{"units": i*64} for i in range(1, 5)],
 }
 
 SETTINGS = {
