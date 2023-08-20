@@ -55,6 +55,7 @@ class RemoveVisibility(Preprocessor):
 
 class Balancer(Preprocessor):
     def __init__(self, threshold, ratio):
+        self.unlabeled = 3
         self.threshold = threshold
         self.ratio = ratio
 
@@ -68,6 +69,9 @@ class Balancer(Preprocessor):
         y_result = []
         index = 0
         while index < len(x):
+            if y[index] == self.unlabeled:
+                index+=1
+                continue
             if y[index] == label:
                 count += 1
             else:
