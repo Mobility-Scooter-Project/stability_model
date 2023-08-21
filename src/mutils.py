@@ -317,6 +317,9 @@ class ModelTest(ModelOperation):
                 + (["avg_test_loss"] if len(self.raw_data[2][0]) else [])
                 + [f"avg_test_loss_{i}" for i,v in enumerate(self.test_data or [])],
         ).to_csv(output_path)
+        with open(output_path, 'a') as of, open(os.path.join('src', 'nn', f'{self.output_name}.py')) as nnf:
+            of.write('\n')
+            of.write(nnf.read())
 
     def test(self, option_idx):
         if option_idx == len(self.final_options):
