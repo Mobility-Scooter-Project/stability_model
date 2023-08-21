@@ -8,7 +8,7 @@ DATA = get_filenames("data")
 OPTIONS = {
     "preprocess": StableFilter(stable_label=0, padding=30),
     "batchsize": 40,
-    "timestamp": 16,
+    "timesteps": 16,
     "optimizer": "adam",
 }
 

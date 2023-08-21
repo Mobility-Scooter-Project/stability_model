@@ -1,18 +1,18 @@
-from nn.lstm import LSTM
+#!/data03/home/ruoqihuang/anaconda3/envs/tf/bin/python
 from mutils import ModelTest, split_data, get_filenames
-from preprocessor import Balancer, Jitter, StableFilter, UnstableFilter
+from preprocessor import StableFilter, UnstableFilter
+
 from nn.autoencoder_00 import Encoder_Decoder
 
+OUTPUT_NAME = 'autoencoder_00'
 
 
 MAX_EPOCHS = 30
-
 DATA = get_filenames("data")
-
 OPTIONS = {
     "preprocess": [StableFilter(stable_label=0, padding=30)],
-    "batchsize": [40],
-    "timestamp": [16],
+    "batchsize": [20, 40],
+    "timesteps": [16*i for i in range(1, 5)],
     "optimizer": ["adam"],
     "layer1": [{"units": i*5} for i in range(1, 10)],
 }
@@ -33,7 +33,8 @@ SETTINGS = {
     # "loss":"sparse_categorical_crossentropy",
     # "metrics": ['accuracy'],
     "verbose": 1,
-    "test_data": [unstable_test_data, stable_test_data]
+    "test_data": [unstable_test_data, stable_test_data],
+    "output_name": OUTPUT_NAME
 }
 
 ModelTest(Encoder_Decoder, DATA[number_of_test_file:], OPTIONS, **SETTINGS).run()

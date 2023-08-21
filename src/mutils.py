@@ -157,7 +157,9 @@ class ModelOperation:
         loss='mse',
         metrics=['mse'],
         verbose=0,
-        test_data=None
+        test_data=None,
+        output_name=None
+
     ):
         self.max_epochs = max_epochs
         self.early_stop_valid_patience = early_stop_valid_patience
@@ -178,10 +180,12 @@ class ModelOperation:
         self.raw_data = split_data(data, valid_ratio, test_ratio)
         self.test_data = test_data
 
+        self.output_name = output_name
+
 
         self.defalut_params = {
             "batchsize": 16,
-            "timestamp": 32,
+            "timesteps": 32,
             "optimizer": "adam",
             "preprocess": None,
         }
@@ -251,9 +255,9 @@ class ModelOperation:
         val_loss = model.evaluate(x_valid, y_valid, batch_size=batchsize, verbose=0)[0]
         test_loss = []
         if self.test_data is not None:
-            timestamp = self.params.get("timestamp")
+            timesteps = self.params.get("timesteps")
             for test in self.test_data:
-                x_test, y_test = group_data(test, timestamp, self.model_class.target_function)
+                x_test, y_test = group_data(test, timesteps, self.model_class.target_function)
                 test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
         elif len(x_test)>0:
             test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
@@ -296,14 +300,16 @@ class ModelTest(ModelOperation):
                 layer_number = int(name[5:])
                 self.layer_options[layer_number] = option
             self.params[name] = option
-        timestamp = self.params.get("timestamp")
+        timesteps = self.params.get("timesteps")
         for i in range(3):
-            self.final_data[i] = group_data(self.final_data[i], timestamp, self.model_class.target_function)
+            self.final_data[i] = group_data(self.final_data[i], timesteps, self.model_class.target_function)
 
     def run(self):
         self.history = []
         self.test(0)
         output_path = os.path.join("test_results", str(int(time.time())) + ".csv")
+        if self.output_name:
+            output_path = os.path.join("test_results", str(len(os.listdir("test_results"))).zfill(2)+'_'+self.output_name)
         pd.DataFrame(
             data=self.history,
             columns=list(next(zip(*self.final_options)))
@@ -361,7 +367,7 @@ class ModelTrain(ModelOperation):
                 self.final_data[i] = option.transform(self.final_data[i]) 
         for i in range(3):
             self.final_data[i] = group_data(
-                self.final_data[i], self.params.get("timestamp"), self.model_class.target_function
+                self.final_data[i], self.params.get("timesteps"), self.model_class.target_function
             )
 
     def run(self):

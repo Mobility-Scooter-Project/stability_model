@@ -30,7 +30,7 @@ final_data = split_data(data, valid_ratio, test_ratio)
 
 optimizer="adam"
 batchsize=16
-timestamp= 32
+timesteps= 32
 preprocess = None
 input_shape = final_data[0][0].shape[1:]
 
@@ -80,9 +80,9 @@ loss = model.evaluate(x_train, y_train, batch_size=batchsize, verbose=0)[0]
 val_loss = model.evaluate(x_valid, y_valid, batch_size=batchsize, verbose=0)[0]
 test_loss = []
 if test_data is not None:
-    timestamp = timestamp
+    timesteps = timesteps
     for test in test_data:
-        x_test, y_test = group_data(test, timestamp, self.model_class.target_function)
+        x_test, y_test = group_data(test, timesteps, self.model_class.target_function)
         test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
 elif len(x_test)>0:
     test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])

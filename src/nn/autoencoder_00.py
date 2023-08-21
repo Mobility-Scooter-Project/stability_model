@@ -1,5 +1,8 @@
-from keras import Input, layers, Model
+'''
+lstm -> repeat vector -> lstm
+'''
 
+from keras import Input, layers, Model
 TIMESTEPS = 16
 NUM_FEATURES = 27
 VECTOR_SIZE = 10
