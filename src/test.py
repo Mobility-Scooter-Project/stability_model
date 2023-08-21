@@ -4,7 +4,7 @@ from preprocessor import StableFilter, UnstableFilter
 
 from nn.autoencoder_00 import Encoder_Decoder
 
-OUTPUT_NAME = 'autoencoder_00'
+NN_NAME = 'autoencoder_00'
 
 
 MAX_EPOCHS = 30
@@ -34,7 +34,7 @@ SETTINGS = {
     # "metrics": ['accuracy'],
     "verbose": 1,
     "test_data": [unstable_test_data, stable_test_data],
-    "output_name": OUTPUT_NAME
+    "output_name": NN_NAME
 }
 
-ModelTest(Encoder_Decoder, DATA[number_of_test_file:], OPTIONS, **SETTINGS).run()
+ModelTest(Encoder_Decoder, DATA, OPTIONS, **SETTINGS).run()
