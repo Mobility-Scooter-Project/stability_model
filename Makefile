@@ -4,7 +4,7 @@ setup:
 	mkdir data
 
 test:
-	python -B ./src/test.py
+	python -B ./src/test_lstm.py
 
 train:
 	python -B ./src/train.py

@@ -6,8 +6,10 @@
     * loss function
 
 ## Usage
+* `pip install pandas tensorflow opencv-python pims av tqdm`
 * `make test` to test different configurations specify in `src/test.py`
   * models are specified in the `src/nn` folder
+
 
 ## Documation
 * `mutils.py` contains the actual operation code for model training and testing
