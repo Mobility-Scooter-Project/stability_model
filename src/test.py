@@ -7,7 +7,7 @@ from nn.autoencoder_00 import Encoder_Decoder
 NN_NAME = 'autoencoder_00'
 
 
-MAX_EPOCHS = 30
+MAX_EPOCHS = 40
 DATA = get_filenames("data")
 TEST_DATA = get_filenames("test_data")
 OPTIONS = {
