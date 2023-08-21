@@ -3,3 +3,4 @@ data
 video
 __pycache__
 *.zip
+test_data
