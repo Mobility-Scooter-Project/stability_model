@@ -1,7 +1,7 @@
 from nn.lstm import LSTM
 from mutils import ModelTest, split_data, get_filenames
 from preprocessor import Balancer, Jitter, StableFilter, UnstableFilter
-from nn.encoder_decoder import Encoder_Decoder
+from nn.autoencoder_00 import Encoder_Decoder
 
 
 

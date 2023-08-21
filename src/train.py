@@ -1,5 +1,5 @@
 from nn.lstm import LSTM
-from nn.encoder_decoder import Encoder_Decoder
+from nn.autoencoder_02 import Encoder_Decoder
 from preprocessor import StableFilter, UnstableFilter
 from mutils import ModelTrain, split_data, get_filenames
 
