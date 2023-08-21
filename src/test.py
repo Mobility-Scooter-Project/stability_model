@@ -18,8 +18,8 @@ OPTIONS = {
     "layer1": [{"units": i*5} for i in range(1, 10)],
 }
 
-stable_test_data = StableFilter(stable_label=0, padding=30).transform(split_data(TEST_DATA, 0, 0)[0])
-unstable_test_data = UnstableFilter(stable_label=0, padding=10).transform(split_data(TEST_DATA, 0, 0)[0])
+stable_test_data = StableFilter(stable_label=0, padding=30).transform(split_data(TEST_DATA, 0, 0, index=True)[0])
+unstable_test_data = UnstableFilter(stable_label=0, padding=10).transform(split_data(TEST_DATA, 0, 0, index=True)[0])
 
 SETTINGS = {
     "max_epochs":MAX_EPOCHS,

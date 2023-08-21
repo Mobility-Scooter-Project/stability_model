@@ -110,10 +110,16 @@ def split_data_without_label(df, valid_size, test_size):
     return [(x_train, y_train), (x_valid, y_valid), (x_test, y_test)]
 
 
-def split_data(DATA, VALID_RATIO, TEST_RATIO):
-    DBs = [
-        pd.read_csv(name, index_col=0) for name in DATA
-    ]
+def split_data(DATA, VALID_RATIO, TEST_RATIO, index=False):
+    DBs = None
+    if index:
+        DBs = [
+            pd.read_csv(name, index_col=0) for name in DATA
+        ]
+    else:
+        DBs = [
+            pd.read_csv(name) for name in DATA
+        ]
     DB = pd.concat(DBs, axis=0, ignore_index=True, sort=False)
     DB = convert_df_labels(DB, labels2int)
 
