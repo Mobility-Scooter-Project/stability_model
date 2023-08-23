@@ -1,4 +1,5 @@
 #!/data03/home/ruoqihuang/anaconda3/envs/tf/bin/python
+import os
 from mutils import ModelTest, split_data, get_filenames
 from preprocessor import StableFilter, UnstableFilter
 
@@ -20,6 +21,10 @@ OPTIONS = {
 
 stable_test_data = StableFilter(stable_label=0, padding=30).transform(split_data(TEST_DATA, 0, 0, index=True)[0])
 unstable_test_data = UnstableFilter(stable_label=0, padding=10).transform(split_data(TEST_DATA, 0, 0, index=True)[0])
+extra = ""
+with open(os.path.join('src', 'nn', f'{NN_NAME}.py')) as nnf:
+    extra += nnf.read()
+
 
 SETTINGS = {
     "max_epochs":MAX_EPOCHS,
@@ -34,7 +39,8 @@ SETTINGS = {
     # "metrics": ['accuracy'],
     "verbose": 1,
     "test_data": [unstable_test_data, stable_test_data],
-    "output_name": NN_NAME
+    "output_name": NN_NAME,
+    "extra": extra
 }
 
 ModelTest(Encoder_Decoder, DATA, OPTIONS, **SETTINGS).run()

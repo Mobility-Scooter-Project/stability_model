@@ -164,8 +164,8 @@ class ModelOperation:
         metrics=['mse'],
         verbose=0,
         test_data=None,
-        output_name=None
-
+        output_name=None,
+        extra="",
     ):
         self.max_epochs = max_epochs
         self.early_stop_valid_patience = early_stop_valid_patience
@@ -187,6 +187,7 @@ class ModelOperation:
         self.test_data = test_data
 
         self.output_name = output_name
+        self.extra = extra
 
 
         self.defalut_params = {
@@ -323,9 +324,9 @@ class ModelTest(ModelOperation):
                 + (["avg_test_loss"] if len(self.raw_data[2][0]) else [])
                 + [f"avg_test_loss_{i}" for i,v in enumerate(self.test_data or [])],
         ).to_csv(output_path)
-        with open(output_path, 'a') as of, open(os.path.join('src', 'nn', f'{self.output_name}.py')) as nnf:
+        with open(output_path, 'a') as of:
             of.write('\n')
-            of.write(nnf.read())
+            of.write(self.extra)
 
     def test(self, option_idx):
         if option_idx == len(self.final_options):
