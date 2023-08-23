@@ -13,10 +13,10 @@ DATA = get_filenames("data")
 TEST_DATA = get_filenames("test_data")
 OPTIONS = {
     "preprocess": [StableFilter(stable_label=0, padding=30)],
-    "batchsize": [20, 40],
+    "batchsize": [40],
     "timesteps": [16*i for i in range(1, 5)],
     "optimizer": ["adam"],
-    "layer1": [{"units": i*5} for i in range(1, 10)],
+    # "layer1": [{"units": i*5} for i in range(1, 10)],
 }
 
 stable_test_data = StableFilter(stable_label=0, padding=30).transform(split_data(TEST_DATA, 0, 0, index=True)[0])
