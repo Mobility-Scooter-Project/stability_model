@@ -14,5 +14,6 @@ class Encoder_Decoder:
     outputs = layers.LSTM(NUM_FEATURES, return_sequences=True)(lstm)
     model = Model(inputs=inputs, outputs=outputs)
 
-    def target_function(arr):
-        return arr
+    def target_function(self, data):
+        x, y = data
+        return x

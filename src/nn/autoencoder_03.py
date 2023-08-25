@@ -1,24 +1,25 @@
 from keras import Input, layers, Model
 
 TIMESTEPS = 16
-NUM_FEATURES = 27
 VECTOR_SIZE = 10
-class Encoder_Decoder:
-    '''without repeat vector'''
-    # inputs = Input(shape=(TIMESTEPS, NUM_FEATURES))
-    # lstm = layers.LSTM(64, return_sequences=True)(inputs)
-    # lstm = layers.LSTM(32, return_sequences=True)(lstm)
-    # lstm = layers.LSTM(16, return_sequences=True)(lstm)
-    # lstm = layers.LSTM(32, return_sequences=True)(lstm)
-    # lstm = layers.LSTM(64, return_sequences=True)(lstm)
-    # outputs = layers.LSTM(NUM_FEATURES, return_sequences=True)(lstm)
-    # model = Model(inputs=inputs, outputs=outputs)
-    '''with repeat vector'''
-    inputs = Input(shape=(TIMESTEPS, NUM_FEATURES))
-    lstm = layers.LSTM(VECTOR_SIZE, return_sequences=False)(inputs)
-    repeat = layers.RepeatVector(TIMESTEPS)(lstm)
-    outputs = layers.LSTM(NUM_FEATURES, return_sequences=True)(repeat)
-    model = Model(inputs=inputs, outputs=outputs)
 
-    def target_function(arr):
-        return arr
+class Encoder_Decoder:
+    def __init__(self, number_of_features):
+
+        inputs = Input(shape=(TIMESTEPS, number_of_features))
+        x = layers.Conv1D(1, 3, padding="same")(inputs)
+        outputs = layers.Conv1DTranspose(number_of_features, 3, padding="same")(x)
+        self.model = Model(inputs=inputs, outputs=outputs)
+
+    def target_function(self, data):
+        x, y = data
+        return x
+
+OPTIONS = {
+    "batchsize": [40],
+    "timesteps": [TIMESTEPS],
+    "optimizer": ["adam"],
+    "loss": ['mae', 'mse'],
+    "metrics": ['mae', 'mse'],
+    # "layer1": [{"units": i*5} for i in range(1, 10)],
+}

@@ -132,16 +132,13 @@ def group_data(data, group_size, target_function):
     y_result = []
     x_temp = []
     y_temp = []
-    for i in x:
-        x_temp.append(i)
+    for a, b in zip(x, y):
+        x_temp.append(a)
+        y_temp.append(b)
         if len(x_temp) == group_size:
             x_result.append(x_temp)
+            y_result.append(target_function((x_temp, y_temp)))
             x_temp = []
-    for i in y:
-        y_temp.append(i)
-        if len(y_temp) == group_size:
-            # result.append(sum(y_temp) / group_size / 2)
-            y_result.append(target_function(y_temp))
             y_temp = []
 
     return np.array(x_result), np.array(y_result)
@@ -166,6 +163,7 @@ class ModelOperation:
         test_data=None,
         output_name=None,
         extra="",
+        preprocess=None
     ):
         self.max_epochs = max_epochs
         self.early_stop_valid_patience = early_stop_valid_patience
@@ -194,7 +192,9 @@ class ModelOperation:
             "batchsize": 16,
             "timesteps": 32,
             "optimizer": "adam",
-            "preprocess": None,
+            "preprocess": preprocess,
+            "loss": "mae",
+            "metrics": "mae"
         }
 
         self.model = None
@@ -220,15 +220,14 @@ class ModelOperation:
                     config[k] = v
             current_layer = layer.__class__(**config)(current_layer)
         model = Model(inputs=input_layer, outputs=current_layer)
-        if self.verbose:
-            model.summary()
+        model.summary()
         return model
 
     def train(self, clean_model):
         (x_train, y_train), (x_valid, y_valid), (x_test, y_test) = self.final_data
         model = models.clone_model(clean_model)
         model.compile(
-            optimizer=self.params.get("optimizer"), loss=self.loss, metrics=self.metrics
+            optimizer=self.params.get("optimizer"), loss=self.params.get("loss"), metrics=[self.params.get("metrics")]
         )
         batchsize = self.params.get("batchsize")
         history = model.fit(
@@ -265,6 +264,7 @@ class ModelOperation:
             timesteps = self.params.get("timesteps")
             for test in self.test_data:
                 x_test, y_test = group_data(test, timesteps, self.model_class.target_function)
+                print(np.array(x_test).shape, np.array(y_test).shape)
                 test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
         elif len(x_test)>0:
             test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
@@ -291,7 +291,6 @@ class ModelTest(ModelOperation):
 
     def process_options(self):
         self.final_data = list(self.raw_data)
-        print()
 
         self.params = {}
         for i in range(len(self.layer_options)):
@@ -311,20 +310,20 @@ class ModelTest(ModelOperation):
         for i in range(3):
             self.final_data[i] = group_data(self.final_data[i], timesteps, self.model_class.target_function)
 
-    def run(self):
+    def run(self, output_path):
         self.history = []
         self.test(0)
-        output_path = os.path.join("test_results", str(int(time.time())) + ".csv")
+        output_file = os.path.join(output_path, str(int(time.time())) + ".csv")
         if self.output_name:
-            output_path = os.path.join("test_results", str(len(os.listdir("test_results"))).zfill(2)+'_'+self.output_name)
+            output_file = os.path.join(output_path, str(len(os.listdir(output_path))).zfill(2)+'_'+self.output_name+'.csv')
         pd.DataFrame(
             data=self.history,
             columns=list(next(zip(*self.final_options)))
                 + ["avg_epochs", "avg_loss", "avg_valid_loss"]
                 + (["avg_test_loss"] if len(self.raw_data[2][0]) else [])
                 + [f"avg_test_loss_{i}" for i,v in enumerate(self.test_data or [])],
-        ).to_csv(output_path)
-        with open(output_path, 'a') as of:
+        ).to_csv(output_file)
+        with open(output_file, 'a') as of:
             of.write('\n')
             of.write(self.extra)
 
