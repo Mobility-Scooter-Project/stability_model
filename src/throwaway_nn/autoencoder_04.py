@@ -1,5 +1,5 @@
 '''
-lstm -> repeat vector -> lstm
+conv1d -> repeat vector -> lstm
 '''
 
 from keras import Input, layers, Model
@@ -8,8 +8,9 @@ VECTOR_SIZE = 10
 class Encoder_Decoder:
     def __init__(self, number_of_features):
         inputs = Input(shape=(TIMESTEPS, number_of_features))
-        lstm = layers.LSTM(VECTOR_SIZE, return_sequences=False)(inputs)
-        repeat = layers.RepeatVector(TIMESTEPS)(lstm)
+        x = layers.Conv1D(1, 3, padding="same")(inputs)
+        x = layers.Flatten()(x)
+        repeat = layers.RepeatVector(TIMESTEPS)(x)
         outputs = layers.LSTM(number_of_features, return_sequences=True)(repeat)
         self.model = Model(inputs=inputs, outputs=outputs)
 
@@ -21,7 +22,7 @@ OPTIONS = {
     "batchsize": [40],
     "timesteps": [TIMESTEPS],
     "optimizer": ["adam"],
-    "loss": ['mse'],
+    "loss": ['mse', 'mae'],
     "metrics": ['mse'],
-    "layer1": [{"units": i*5} for i in range(1, 4)],
+    "layer1": [{"filters": i} for i in [5, 10, 20, 40]],
 }

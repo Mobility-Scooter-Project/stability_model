@@ -5,9 +5,9 @@ import numpy as np
 from mutils import ModelTest, split_data, get_filenames
 from preprocessor import StableFilter, UnstableFilter
 
-from nn.autoencoder_04 import Encoder_Decoder, OPTIONS
+from throwaway_nn.autoencoder_00 import Encoder_Decoder, OPTIONS
 
-NN_NAME = 'autoencoder_04'
+NN_NAME = 'autoencoder_00'
 
 
 MAX_EPOCHS = 40
@@ -30,7 +30,7 @@ unstable_test_data_3d = UnstableFilter(stable_label=0, padding=10).transform(spl
 stable_test_data_2d = StableFilter(stable_label=0, padding=30).transform(split_data(TEST_DATA2D, 0, 0)[0])
 unstable_test_data_2d = UnstableFilter(stable_label=0, padding=10).transform(split_data(TEST_DATA2D, 0, 0)[0])
 extra = ""
-with open(os.path.join('src', 'nn', f'{NN_NAME}.py')) as nnf:
+with open(os.path.join('src', 'throwaway_nn', f'{NN_NAME}.py')) as nnf:
     extra += nnf.read()
 
 # "loss":"sparse_categorical_crossentropy",
