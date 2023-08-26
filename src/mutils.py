@@ -264,7 +264,6 @@ class ModelOperation:
             timesteps = self.params.get("timesteps")
             for test in self.test_data:
                 x_test, y_test = group_data(test, timesteps, self.model_class.target_function)
-                print(np.array(x_test).shape, np.array(y_test).shape)
                 test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
         elif len(x_test)>0:
             test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
@@ -315,7 +314,7 @@ class ModelTest(ModelOperation):
         self.test(0)
         output_file = os.path.join(output_path, str(int(time.time())) + ".csv")
         if self.output_name:
-            output_file = os.path.join(output_path, str(len(os.listdir(output_path))).zfill(2)+'_'+self.output_name+'.csv')
+            output_file = os.path.join(output_path, str(len(os.listdir(output_path))).zfill(2)+'-'+self.output_name+'.csv')
         pd.DataFrame(
             data=self.history,
             columns=list(next(zip(*self.final_options)))

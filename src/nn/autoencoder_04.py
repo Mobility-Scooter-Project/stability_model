@@ -1,13 +1,13 @@
 from keras import Input, layers, Model
 
-TIMESTEPS = 16
+TIMESTEPS = 32
 VECTOR_SIZE = 10
 
 class Encoder_Decoder:
     def __init__(self, number_of_features):
         inputs = Input(shape=(TIMESTEPS, number_of_features))
-        x = layers.Conv1D(1, 3, padding="same")(inputs)
-        outputs = layers.Conv1DTranspose(number_of_features, 3, padding="same")(x)
+        lstm = layers.LSTM(VECTOR_SIZE, return_sequences=True)(inputs)
+        outputs = layers.Conv1DTranspose(number_of_features, 3, padding="same")(lstm)
         self.model = Model(inputs=inputs, outputs=outputs)
 
     def target_function(self, data):
@@ -20,5 +20,5 @@ OPTIONS = {
     "optimizer": ["adam"],
     "loss": ['mse'],
     "metrics": ['mse'],
-    "layer1": [{"filters": i} for i in range(1, 6)],
+    "layer1": [{"units": i} for i in range(1, 6)],
 }

@@ -5,9 +5,9 @@ import numpy as np
 from mutils import ModelTest, split_data, get_filenames
 from preprocessor import StableFilter, UnstableFilter
 
-from nn.autoencoder_03 import Encoder_Decoder, OPTIONS
+from nn.autoencoder_04 import Encoder_Decoder, OPTIONS
 
-NN_NAME = 'autoencoder_03'
+NN_NAME = 'autoencoder_04'
 
 
 MAX_EPOCHS = 40

@@ -1,0 +1,31 @@
+,batchsize,timesteps,optimizer,loss,metrics,layer1,preprocess,avg_epochs,avg_loss,avg_valid_loss,avg_test_loss_0,avg_test_loss_1
+0,40,32,adam,mse,mse,{'units': 1},Stable Filter,19.333333333333332,0.0039953195955604315,0.00495486023525397,0.005871902996053298,0.005158033066739638
+1,40,32,adam,mse,mse,{'units': 2},Stable Filter,16.333333333333332,0.0024532106084128222,0.0031795495500167212,0.004452293428281943,0.003972151471922795
+2,40,32,adam,mse,mse,{'units': 3},Stable Filter,28.333333333333332,0.0017189629143103957,0.0024603928128878274,0.002884824605037769,0.002657236997038126
+3,40,32,adam,mse,mse,{'units': 4},Stable Filter,31.0,0.0012088174698874354,0.0018288004600132506,0.0025376443906376758,0.002230982994660735
+4,40,32,adam,mse,mse,{'units': 5},Stable Filter,27.666666666666668,0.000914469943381846,0.0014283508838464816,0.0019613385278110704,0.0014957711488629382
+
+from keras import Input, layers, Model
+
+TIMESTEPS = 32
+VECTOR_SIZE = 10
+
+class Encoder_Decoder:
+    def __init__(self, number_of_features):
+        inputs = Input(shape=(TIMESTEPS, number_of_features))
+        lstm = layers.LSTM(VECTOR_SIZE, return_sequences=True)(inputs)
+        outputs = layers.Conv1DTranspose(number_of_features, 3, padding="same")(lstm)
+        self.model = Model(inputs=inputs, outputs=outputs)
+
+    def target_function(self, data):
+        x, y = data
+        return x
+
+OPTIONS = {
+    "batchsize": [40],
+    "timesteps": [TIMESTEPS],
+    "optimizer": ["adam"],
+    "loss": ['mse'],
+    "metrics": ['mse'],
+    "layer1": [{"units": i} for i in range(1, 6)],
+}
