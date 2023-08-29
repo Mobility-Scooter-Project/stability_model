@@ -23,5 +23,5 @@ OPTIONS = {
     "optimizer": ["adam"],
     "loss": ['mse'],
     "metrics": ['mse'],
-    "layer1": [{"units": 10}],
+    "layer1": [{"units": 40}],
 }
