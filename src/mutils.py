@@ -205,6 +205,9 @@ class ModelOperation:
     def run(self):
         raise Exception("<run> method must be defined for ModelOperation")
 
+    def evaluate(self, model):
+        pass
+
     def build(self):
         # Reconstruct model
         layers = self.base_model.layers
@@ -268,6 +271,7 @@ class ModelOperation:
         elif len(x_test)>0:
             test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
         self.model = model
+        self.evaluate(model)
         return epochs, loss, val_loss, test_loss
 
 
@@ -287,6 +291,14 @@ class ModelTest(ModelOperation):
             if not found:
                 self.final_options.append((name1, [param1]))
         self.current_options = [None] * len(self.final_options)
+    
+    def evaluate(self, model):
+        x_test, y_test = self.test_data
+        timesteps = self.params.get("timesteps")
+        x_test, y_test = group_data(self.test_data, timesteps, self.model_class.target_function)
+        results = model.predict(x_test)
+        mse_arr = [np.mean((v1 - v2)**2 for v1, v2 in zip(y_test, results))]
+        save_float_array(self.output_name+'_loss', mse_arr)
 
     def process_options(self):
         self.final_data = list(self.raw_data)
@@ -421,3 +433,8 @@ class ModelTrain(ModelOperation):
             [f.write(f'{str(k)}: {str(v)}\n') for k, v in self.params.items()]
         print(f"Model saved to <{model_path}>.")
 
+
+def save_float_array(path, arr):
+    with open(path, 'w') as f:
+        for num in arr:
+            f.write(f'{num}\n')

@@ -1,12 +1,3 @@
-,batchsize,timesteps,optimizer,loss,metrics,layer1,preprocess,avg_epochs,avg_loss,avg_valid_loss,avg_test_loss_0,avg_test_loss_1
-0,40,16,adam,mse,mse,{'units': 5},No Change,39.0,0.0024351708125323057,0.003019806540881594,0.004536861398567756,0.0018524006785204012
-1,40,16,adam,mse,mse,{'units': 10},No Change,40.0,0.0018491131874422233,0.002199872164055705,0.003092778225739797,0.0010712100969006617
-2,40,16,adam,mse,mse,{'units': 15},No Change,40.0,0.0016959632436434429,0.001953992100122074,0.002681195347880324,0.0007797788906221589
-
-'''
-lstm -> repeat vector -> lstm
-'''
-
 from keras import Input, layers, Model
 TIMESTEPS = 16
 VECTOR_SIZE = 10
@@ -26,7 +17,7 @@ OPTIONS = {
     "batchsize": [40],
     "timesteps": [TIMESTEPS],
     "optimizer": ["adam"],
-    "loss": ['mse'],
+    "loss": ['mse', 'mae'],
     "metrics": ['mse'],
-    "layer1": [{"units": i*5} for i in range(1, 4)],
+    "layer1": [{"units": i} for i in [5, 10, 20, 40]],
 }

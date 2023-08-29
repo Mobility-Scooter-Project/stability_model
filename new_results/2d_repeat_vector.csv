@@ -1,4 +1,4 @@
-﻿Structure,timesteps,loss,metrics,vector_size,avg_epochs,avg_loss,avg_valid_loss,avg_test_loss_0,avg_test_loss_1
+﻿Structure,timesteps,loss,metrics,vector_size,avg_epochs,avg_loss,avg_valid_loss,unstable_loss,stable_loss
 lstm->vector->lstm,,,,,,,,,
 ,16,mse,mse,{'units': 5},40,0.002501499,0.002684548,0.004324597,0.001710031
 ,16,mse,mse,{'units': 10},40,0.001898776,0.001987168,0.003070224,0.000996716
