@@ -21,7 +21,7 @@ OPTIONS = {
     "batchsize": [40],
     "timesteps": [TIMESTEPS],
     "optimizer": ["adam"],
-    "loss": ['mse', 'mae'],
+    "loss": ['mse'],
     "metrics": ['mse'],
-    "layer1": [{"units": i} for i in [5, 10, 20, 40]],
+    "layer1": [{"units": 10}],
 }

@@ -293,13 +293,18 @@ class ModelTest(ModelOperation):
         self.current_options = [None] * len(self.final_options)
     
     def evaluate(self, model):
-        x_test, y_test = self.test_data
         timesteps = self.params.get("timesteps")
-        x_test, y_test = group_data(self.test_data, timesteps, self.model_class.target_function)
-        results = model.predict(x_test)
-        mse_arr = [np.mean((v1 - v2)**2 for v1, v2 in zip(y_test, results))]
-        output_file = os.path.join("losses", self.output_name+'-'+str(len(os.listdir("losses"))).zfill(2)+'_loss'+'.csv')
-        save_float_array(output_file, mse_arr)
+        x_test_1, y_test_1 = group_data(self.test_data[0], timesteps, self.model_class.target_function)
+        results_1 = model.predict(x_test_1)
+        mse_arr_1 = [np.mean((v1 - v2)**2) for v1, v2 in zip(y_test_1, results_1)]
+        prefix = self.output_name+'-'+str(len(os.listdir("losses"))).zfill(2)
+        output_file = os.path.join("losses", prefix+'_1.csv')
+        save_float_array(output_file, mse_arr_1)
+        x_test_2, y_test_2 = group_data(self.test_data[1], timesteps, self.model_class.target_function)
+        results_2 = model.predict(x_test_2)
+        mse_arr_2 = [np.mean((v1 - v2)**2) for v1, v2 in zip(y_test_2, results_2)]
+        output_file = os.path.join("losses", prefix+'_2.csv')
+        save_float_array(output_file, mse_arr_2)
 
     def process_options(self):
         self.final_data = list(self.raw_data)
