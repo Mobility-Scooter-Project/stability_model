@@ -298,7 +298,8 @@ class ModelTest(ModelOperation):
         x_test, y_test = group_data(self.test_data, timesteps, self.model_class.target_function)
         results = model.predict(x_test)
         mse_arr = [np.mean((v1 - v2)**2 for v1, v2 in zip(y_test, results))]
-        save_float_array(self.output_name+'_loss', mse_arr)
+        output_file = os.path.join("losses", self.output_name+'-'+str(len(os.listdir("losses"))).zfill(2)+'_loss'+'.csv')
+        save_float_array(output_file, mse_arr)
 
     def process_options(self):
         self.final_data = list(self.raw_data)
