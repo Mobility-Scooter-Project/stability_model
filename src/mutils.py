@@ -297,7 +297,7 @@ class ModelTest(ModelOperation):
         x_test_1, y_test_1 = group_data(self.test_data[0], timesteps, self.model_class.target_function)
         results_1 = model.predict(x_test_1)
         mse_arr_1 = [np.mean((v1 - v2)**2) for v1, v2 in zip(y_test_1, results_1)]
-        vector_size = self.params['layer1']
+        vector_size = list(self.params['layer1'].values)[0]
         prefix = self.output_name+'-'+str(len(os.listdir("losses"))).zfill(2)+'-'+str(vector_size)
         output_file = os.path.join("losses", prefix+'_1.csv')
         save_float_array(output_file, mse_arr_1)
