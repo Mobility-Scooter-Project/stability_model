@@ -8,7 +8,7 @@ VECTOR_SIZE = 10
 class Encoder_Decoder:
     def __init__(self, number_of_features):
         inputs = Input(shape=(TIMESTEPS, number_of_features))
-        x = layers.Conv1D(1, 3, padding="same")(inputs)
+        x = layers.Conv1D(1, TIMESTEPS, padding="valid")(inputs)
         x = layers.Flatten()(x)
         repeat = layers.RepeatVector(TIMESTEPS)(x)
         outputs = layers.LSTM(number_of_features, return_sequences=True)(repeat)
