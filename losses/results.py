@@ -28,12 +28,12 @@ def read_file_as_np_array(filename):
 unstable = read_file_as_np_array('autoencoder_02-00_1.csv')
 stable= read_file_as_np_array('autoencoder_02-00_2.csv')
 print(compute_metrics(stable, unstable))
-# output
+# (roc auc, pr auc)
 # (0.844039813338059, 0.9929606917650728)
 
 # conv1d -> vector -> lstm
 unstable = read_file_as_np_array('autoencoder_06-02_1.csv')
 stable= read_file_as_np_array('autoencoder_06-02_2.csv')
 print(compute_metrics(stable, unstable))
-# output
+# (roc auc, pr auc)
 # (0.8207028514046059, 0.9916645699293452)
