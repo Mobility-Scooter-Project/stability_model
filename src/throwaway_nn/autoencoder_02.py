@@ -23,5 +23,5 @@ OPTIONS = {
     "optimizer": ["adam"],
     "loss": ['mse'],
     "metrics": ['mse'],
-    "layer1": [{"units": i} for i in [5, 10, 20, 40, 80]],
+    "layer1": [{"units": i} for i in [4, 8, 16, 32, 64, 128]],
 }
