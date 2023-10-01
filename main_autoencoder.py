@@ -4,18 +4,22 @@ import importlib
 
 
 import numpy as np
-from src.mutils import ModelTest, split_data, get_filenames
+from src.mutils import ModelTest, split_data, get_filenames, argdict
 from src.preprocessor import StableFilter, UnstableFilter
-from src.argdict import argdict
 
 
-params = argdict()
+args = argdict({
+    'model': 'autoencoder_00',
+    "max_epochs": 40,
+    "valid_ratio":0.3,
+    "num_train_per_config":1,
+    "verbose": 0,
+})
 
-model = "autoencoder_00"
-autoencoder = importlib.import_module(f"src.throwaway_nn.{model}")
+autoencoder = importlib.import_module(f"src.throwaway_nn.{args.model}")
 Encoder_Decoder, OPTIONS = autoencoder.Encoder_Decoder, autoencoder.OPTIONS
-NN_NAME = model
-MAX_EPOCHS = 40
+NN_NAME = args.model
+MAX_EPOCHS = args.max_epochs
 DATA3D = get_filenames("3d_data")
 TEST_DATA3D = get_filenames("3d_test_data")
 DATA2D = get_filenames("2d_data")
@@ -44,12 +48,12 @@ with open(os.path.join('src', 'throwaway_nn', f'{NN_NAME}.py')) as nnf:
 
 SETTINGS_2D = {
     "max_epochs":MAX_EPOCHS,
-    "valid_ratio":0.3,
+    "valid_ratio":args.valid_ratio,
     "test_ratio":0,
     "early_stop_valid_patience":MAX_EPOCHS//10,
     "early_stop_train_patience":MAX_EPOCHS//10,
-    "num_train_per_config":1,
-    "verbose": 0,
+    "num_train_per_config":args.num_train_per_config,
+    "verbose": args.verbose,
     "test_data": [unstable_test_data_2d, stable_test_data_2d],
     "output_name": NN_NAME,
     "extra": extra

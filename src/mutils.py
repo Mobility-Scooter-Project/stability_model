@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import numpy as np
 import sys
+import argparse
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 from vutils import load_settings
 from keras import models, Input, Model
@@ -14,6 +15,13 @@ labels2int = {b: a for a, b in enumerate(settings["labels"])}
 
 landmark_indices = [0, 11, 12, 13, 14, 15, 16, 23, 24]
 
+
+def argdict(defaults: dict):
+    parser = argparse.ArgumentParser(prog='Stability Model Testing')
+    for k, v in defaults.items():
+        parser.add_argument(f'--{k}', type=type(v), default=v)
+    args = parser.parse_args()
+    return args
 
 def get_filenames(folder_path):
     return list(map(lambda y: os.path.join(folder_path, y), filter(lambda x: x[-4:]=='.csv', os.listdir(folder_path))))
