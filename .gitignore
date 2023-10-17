@@ -5,3 +5,5 @@ video
 __pycache__
 *.zip
 test_data
+2d_test_results
+3d_test_results

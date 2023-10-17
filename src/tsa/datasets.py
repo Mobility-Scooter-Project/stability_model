@@ -3,182 +3,183 @@ def nb_dims(dataset):
         return 2
     return 1
 
+
 def nb_classes(dataset):
     if dataset == "unipen1a":
         return 10
     if dataset in ["unipen1b", "unipen1c"]:
         return 26
     if dataset == "FiftyWords":
-        return 50 #270
+        return 50  # 270
     if dataset == "Adiac":
-        return 37 #176
+        return 37  # 176
     if dataset == "ArrowHead":
-        return 3 #251
+        return 3  # 251
     if dataset == "Beef":
-        return 5 #470
+        return 5  # 470
     if dataset == "BeetleFly":
-        return 2 #512
+        return 2  # 512
     if dataset == "BirdChicken":
-        return 2 #512
+        return 2  # 512
     if dataset == "Car":
-        return 4 #577
+        return 4  # 577
     if dataset == "CBF":
-        return 3 #128
+        return 3  # 128
     if dataset == "ChlorineConcentration":
-        return 3 #166
+        return 3  # 166
     if dataset == "CinCECGTorso":
-        return 4 #1639
+        return 4  # 1639
     if dataset == "Coffee":
-        return 2 #286
+        return 2  # 286
     if dataset == "Computers":
-        return 2 #720
+        return 2  # 720
     if dataset == "CricketX":
-        return 12 #300
+        return 12  # 300
     if dataset == "CricketY":
-        return 12 #300
+        return 12  # 300
     if dataset == "CricketZ":
-        return 12 #300
+        return 12  # 300
     if dataset == "DiatomSizeReduction":
-        return 4 #345
+        return 4  # 345
     if dataset == "DistalPhalanxOutlineAgeGroup":
-        return 3 #80
+        return 3  # 80
     if dataset == "DistalPhalanxOutlineCorrect":
-        return 2 #80
+        return 2  # 80
     if dataset == "DistalPhalanxTW":
-        return 6 #80
+        return 6  # 80
     if dataset == "Earthquakes":
-        return 2 #512
+        return 2  # 512
     if dataset == "ECG200":
-        return 2 #96
+        return 2  # 96
     if dataset == "ECG5000":
-        return 5 #140
+        return 5  # 140
     if dataset == "ECGFiveDays":
-        return 2 #136
+        return 2  # 136
     if dataset == "ElectricDevices":
-        return 7 #96
+        return 7  # 96
     if dataset == "FaceAll":
-        return 14 # 131
+        return 14  # 131
     if dataset == "FaceFour":
-        return 4 # 350
+        return 4  # 350
     if dataset == "FacesUCR":
-        return 14 # 131
+        return 14  # 131
     if dataset == "Fish":
-        return 7 # 463
+        return 7  # 463
     if dataset == "FordA":
-        return 2 #500
+        return 2  # 500
     if dataset == "FordB":
-        return 2 # 500
+        return 2  # 500
     if dataset == "GunPoint":
-        return 2 # 150
+        return 2  # 150
     if dataset == "Ham":
-        return 2 # 431
+        return 2  # 431
     if dataset == "HandOutlines":
-        return 2 # 2709
+        return 2  # 2709
     if dataset == "Haptics":
-        return 5 # 1092
+        return 5  # 1092
     if dataset == "Herring":
-        return 2 # 512
+        return 2  # 512
     if dataset == "InlineSkate":
-        return 7 # 1882
+        return 7  # 1882
     if dataset == "InsectWingbeatSound":
-        return 11 # 256
+        return 11  # 256
     if dataset == "ItalyPowerDemand":
-        return 2 # 24
+        return 2  # 24
     if dataset == "LargeKitchenAppliances":
-        return 3 # 720
+        return 3  # 720
     if dataset == "Lightning2":
-        return 2 # 637
+        return 2  # 637
     if dataset == "Lightning7":
-        return 7 # 319
+        return 7  # 319
     if dataset == "Mallat":
-        return 8 # 1024
+        return 8  # 1024
     if dataset == "Meat":
-        return 3 # 448
+        return 3  # 448
     if dataset == "MedicalImages":
-        return 10 # 99
+        return 10  # 99
     if dataset == "MiddlePhalanxOutlineAgeGroup":
-        return 3 #80
+        return 3  # 80
     if dataset == "MiddlePhalanxOutlineCorrect":
-        return 2 #80
+        return 2  # 80
     if dataset == "MiddlePhalanxTW":
-        return 6 #80
+        return 6  # 80
     if dataset == "MoteStrain":
-        return 2 #84
+        return 2  # 84
     if dataset == "NonInvasiveFetalECGThorax1":
-        return 42 #750
+        return 42  # 750
     if dataset == "NonInvasiveFetalECGThorax2":
-        return 42 #750
+        return 42  # 750
     if dataset == "OliveOil":
-        return 4 #570
+        return 4  # 570
     if dataset == "OSULeaf":
-        return 6 #427
+        return 6  # 427
     if dataset == "PhalangesOutlinesCorrect":
-        return 2 #80
+        return 2  # 80
     if dataset == "Phoneme":
-        return 39 #1024
+        return 39  # 1024
     if dataset == "Plane":
-        return 7 #144
+        return 7  # 144
     if dataset == "ProximalPhalanxOutlineAgeGroup":
-        return 3 #80
+        return 3  # 80
     if dataset == "ProximalPhalanxOutlineCorrect":
-        return 2 #80
+        return 2  # 80
     if dataset == "ProximalPhalanxTW":
-        return 6 #80
+        return 6  # 80
     if dataset == "RefrigerationDevices":
-        return 3 #720
+        return 3  # 720
     if dataset == "ScreenType":
-        return 3 #720
+        return 3  # 720
     if dataset == "ShapeletSim":
-        return 2 #500
+        return 2  # 500
     if dataset == "ShapesAll":
-        return 60 # 512
+        return 60  # 512
     if dataset == "SmallKitchenAppliances":
-        return 3 #720
+        return 3  # 720
     if dataset == "SonyAIBORobotSurface2":
-        return 2 #65
+        return 2  # 65
     if dataset == "SonyAIBORobotSurface1":
-        return 2 #70
+        return 2  # 70
     if dataset == "StarLightCurves":
-        return 3 #1024
+        return 3  # 1024
     if dataset == "Strawberry":
-        return 2 #235
+        return 2  # 235
     if dataset == "SwedishLeaf":
-        return 15 # 128
+        return 15  # 128
     if dataset == "Symbols":
-        return 6 #398
+        return 6  # 398
     if dataset == "SyntheticControl":
-        return 6 #60
+        return 6  # 60
     if dataset == "ToeSegmentation1":
-        return 2 #277
+        return 2  # 277
     if dataset == "ToeSegmentation2":
-        return 2 #343
+        return 2  # 343
     if dataset == "Trace":
-        return 4 #275
+        return 4  # 275
     if dataset == "TwoLeadECG":
-        return 2 #82
+        return 2  # 82
     if dataset == "TwoPatterns":
-        return 4 #128
+        return 4  # 128
     if dataset == "UWaveGestureLibraryX":
-        return 8 # 315
+        return 8  # 315
     if dataset == "UWaveGestureLibraryY":
-        return 8 # 315
+        return 8  # 315
     if dataset == "UWaveGestureLibraryZ":
-        return 8 # 315
+        return 8  # 315
     if dataset == "UWaveGestureLibraryAll":
-        return 8 # 945
+        return 8  # 945
     if dataset == "Wafer":
-        return 2 #152
+        return 2  # 152
     if dataset == "Wine":
-        return 2 #234
+        return 2  # 234
     if dataset == "WordSynonyms":
-        return 25 #270
+        return 25  # 270
     if dataset == "Worms":
-        return 5 #900
+        return 5  # 900
     if dataset == "WormsTwoClass":
-        return 2 #900
+        return 2  # 900
     if dataset == "Yoga":
-        return 2 #426
-    
+        return 2  # 426
+
     if dataset == "ACSF1":
         return 10
     if dataset == "AllGestureWiimoteX":
@@ -265,188 +266,190 @@ def nb_classes(dataset):
         return 3
     if dataset == "UMD":
         return 3
-    print("Missing dataset: %s"%dataset)
+    print("Missing dataset: %s" % dataset)
     return 2
-    
+
+
 def class_offset(y, dataset):
     return (y + class_modifier_add(dataset)) * class_modifier_multi(dataset)
-    
+
+
 def class_modifier_add(dataset):
     if dataset == "FiftyWords":
-        return -1 #270
+        return -1  # 270
     if dataset == "Adiac":
-        return -1 #176
+        return -1  # 176
     if dataset == "ArrowHead":
-        return 0 #251
+        return 0  # 251
     if dataset == "Beef":
-        return -1 #470
+        return -1  # 470
     if dataset == "BeetleFly":
-        return -1 #512
+        return -1  # 512
     if dataset == "BirdChicken":
-        return -1 #512
+        return -1  # 512
     if dataset == "Car":
-        return -1 #577
+        return -1  # 577
     if dataset == "CBF":
-        return -1 #128
+        return -1  # 128
     if dataset == "ChlorineConcentration":
-        return -1 #166
+        return -1  # 166
     if dataset == "CinCECGTorso":
-        return -1 #1639
+        return -1  # 1639
     if dataset == "Coffee":
-        return 0 #286
+        return 0  # 286
     if dataset == "Computers":
-        return -1 #720
+        return -1  # 720
     if dataset == "CricketX":
-        return -1 #300
+        return -1  # 300
     if dataset == "CricketY":
-        return -1 #300
+        return -1  # 300
     if dataset == "CricketZ":
-        return -1 #300
+        return -1  # 300
     if dataset == "DiatomSizeReduction":
-        return -1 #345
+        return -1  # 345
     if dataset == "DistalPhalanxOutlineAgeGroup":
-        return -1 #80
+        return -1  # 80
     if dataset == "DistalPhalanxOutlineCorrect":
-        return 0 #80
+        return 0  # 80
     if dataset == "DistalPhalanxTW":
-        return -3 #80
+        return -3  # 80
     if dataset == "Earthquakes":
-        return 0 #512
+        return 0  # 512
     if dataset == "ECG200":
-        return 1 #96
+        return 1  # 96
     if dataset == "ECG5000":
-        return -1 #140
+        return -1  # 140
     if dataset == "ECGFiveDays":
-        return -1 #136
+        return -1  # 136
     if dataset == "ElectricDevices":
-        return -1 #96
+        return -1  # 96
     if dataset == "FaceAll":
-        return -1 # 131
+        return -1  # 131
     if dataset == "FaceFour":
-        return -1 # 350
+        return -1  # 350
     if dataset == "FacesUCR":
-        return -1 # 131
+        return -1  # 131
     if dataset == "Fish":
-        return -1 # 463
+        return -1  # 463
     if dataset == "FordA":
-        return 1 #500
+        return 1  # 500
     if dataset == "FordB":
-        return 1 # 500
+        return 1  # 500
     if dataset == "GunPoint":
-        return -1 # 150
+        return -1  # 150
     if dataset == "Ham":
-        return -1 # 431
+        return -1  # 431
     if dataset == "HandOutlines":
-        return 0 # 2709
+        return 0  # 2709
     if dataset == "Haptics":
-        return -1 # 1092
+        return -1  # 1092
     if dataset == "Herring":
-        return -1 # 512
+        return -1  # 512
     if dataset == "InlineSkate":
-        return -1 # 1882
+        return -1  # 1882
     if dataset == "InsectWingbeatSound":
-        return -1 # 256
+        return -1  # 256
     if dataset == "ItalyPowerDemand":
-        return -1 # 24
+        return -1  # 24
     if dataset == "LargeKitchenAppliances":
-        return -1 # 720
+        return -1  # 720
     if dataset == "Lightning2":
-        return 1 # 637
+        return 1  # 637
     if dataset == "Lightning7":
-        return 0 # 319
+        return 0  # 319
     if dataset == "Mallat":
-        return -1 # 1024
+        return -1  # 1024
     if dataset == "Meat":
-        return -1 # 448
+        return -1  # 448
     if dataset == "MedicalImages":
-        return -1 # 99
+        return -1  # 99
     if dataset == "MiddlePhalanxOutlineAgeGroup":
-        return -1 #80
+        return -1  # 80
     if dataset == "MiddlePhalanxOutlineCorrect":
-        return 0 #80
+        return 0  # 80
     if dataset == "MiddlePhalanxTW":
-        return -3 #80
+        return -3  # 80
     if dataset == "MoteStrain":
-        return -1 #84
+        return -1  # 84
     if dataset == "NonInvasiveFetalECGThorax1":
-        return -1 #750
+        return -1  # 750
     if dataset == "NonInvasiveFetalECGThorax2":
-        return -1 #750
+        return -1  # 750
     if dataset == "OliveOil":
-        return -1 #570
+        return -1  # 570
     if dataset == "OSULeaf":
-        return -1 #427
+        return -1  # 427
     if dataset == "PhalangesOutlinesCorrect":
-        return 0 #80
+        return 0  # 80
     if dataset == "Phoneme":
-        return -1 #1024
+        return -1  # 1024
     if dataset == "Plane":
-        return -1 #144
+        return -1  # 144
     if dataset == "ProximalPhalanxOutlineAgeGroup":
-        return -1 #80
+        return -1  # 80
     if dataset == "ProximalPhalanxOutlineCorrect":
-        return 0 #80
+        return 0  # 80
     if dataset == "ProximalPhalanxTW":
-        return -3 #80
+        return -3  # 80
     if dataset == "RefrigerationDevices":
-        return -1 #720
+        return -1  # 720
     if dataset == "ScreenType":
-        return -1 #720
+        return -1  # 720
     if dataset == "ShapeletSim":
-        return 0 #500
+        return 0  # 500
     if dataset == "ShapesAll":
-        return -1 # 512
+        return -1  # 512
     if dataset == "SmallKitchenAppliances":
-        return -1 #720
+        return -1  # 720
     if dataset == "SonyAIBORobotSurface2":
-        return -1 #65
+        return -1  # 65
     if dataset == "SonyAIBORobotSurface1":
-        return -1 #70
+        return -1  # 70
     if dataset == "StarLightCurves":
-        return -1 #1024
+        return -1  # 1024
     if dataset == "Strawberry":
-        return -1 #235
+        return -1  # 235
     if dataset == "SwedishLeaf":
-        return -1 # 128
+        return -1  # 128
     if dataset == "Symbols":
-        return -1 #398
+        return -1  # 398
     if dataset == "SyntheticControl":
-        return -1 #60
+        return -1  # 60
     if dataset == "ToeSegmentation1":
-        return 0 #277
+        return 0  # 277
     if dataset == "ToeSegmentation2":
-        return 0 #343
+        return 0  # 343
     if dataset == "Trace":
-        return -1 #275
+        return -1  # 275
     if dataset == "TwoLeadECG":
-        return -1 #82
+        return -1  # 82
     if dataset == "TwoPatterns":
-        return -1 #128
+        return -1  # 128
     if dataset == "UWaveGestureLibraryX":
-        return -1 # 315
+        return -1  # 315
     if dataset == "UWaveGestureLibraryY":
-        return -1 # 315
+        return -1  # 315
     if dataset == "UWaveGestureLibraryZ":
-        return -1 # 315
+        return -1  # 315
     if dataset == "UWaveGestureLibraryAll":
-        return -1 # 945
+        return -1  # 945
     if dataset == "Wafer":
-        return 1 #152
+        return 1  # 152
     if dataset == "Wine":
-        return -1 #234
+        return -1  # 234
     if dataset == "WordSynonyms":
-        return -1 #270
+        return -1  # 270
     if dataset == "Worms":
-        return -1 #900
+        return -1  # 900
     if dataset == "WormsTwoClass":
-        return -1 #900
+        return -1  # 900
     if dataset == "Yoga":
-        return -1 #426
-    
+        return -1  # 426
+
     if dataset == "ACSF1":
-        return 0 
+        return 0
     if dataset == "AllGestureWiimoteX":
-        return -1 
+        return -1
     if dataset == "AllGestureWiimoteY":
         return -1
     if dataset == "AllGestureWiimoteZ":
@@ -531,15 +534,16 @@ def class_modifier_add(dataset):
         return -1
     return 0
 
+
 def class_modifier_multi(dataset):
     if dataset == "ECG200":
-        return 0.5 #96
+        return 0.5  # 96
     if dataset == "FordA":
-        return 0.5 #500
+        return 0.5  # 500
     if dataset == "FordB":
-        return 0.5 # 500
+        return 0.5  # 500
     if dataset == "Lightning2":
-        return 0.5 # 637
+        return 0.5  # 637
     if dataset == "Wafer":
-        return 0.5 #152
+        return 0.5  # 152
     return 1
