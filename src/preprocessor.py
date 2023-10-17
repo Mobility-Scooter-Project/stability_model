@@ -3,8 +3,7 @@ import pickle
 
 import numpy
 from collections import Counter
-from tsa import helper as hlp
-from tsa import augmentation as aug
+from .tsa import augmentation as aug
 
 
 class Preprocessor:

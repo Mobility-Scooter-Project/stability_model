@@ -1,22 +1,19 @@
 #!/data03/home/ruoqihuang/anaconda3/envs/tf/bin/python
 import os
 import importlib
-
-
-import numpy as np
 from src.mutils import ModelTest, split_data, get_filenames, argdict
 from src.preprocessor import StableFilter, UnstableFilter
 
 
 args = argdict({
-    'model': 'autoencoder_00',
+    "model": 'conv_conv',
     "max_epochs": 40,
-    "valid_ratio":0.3,
-    "num_train_per_config":1,
+    "valid_ratio": 0.3,
+    "num_train_per_config": 1,
     "verbose": 0,
 })
 
-autoencoder = importlib.import_module(f"src.throwaway_nn.{args.model}")
+autoencoder = importlib.import_module(f"src.nn.{args.model}")
 Encoder_Decoder, OPTIONS = autoencoder.Encoder_Decoder, autoencoder.OPTIONS
 NN_NAME = args.model
 MAX_EPOCHS = args.max_epochs
@@ -26,24 +23,13 @@ DATA2D = get_filenames("2d_data")
 TEST_DATA2D = get_filenames("2d_test_data")
 
 
-
-
-
-
-
-
-
-
 stable_test_data_3d = StableFilter(stable_label=0, padding=30).transform(split_data(TEST_DATA3D, 0, 0, index=True)[0])
 unstable_test_data_3d = UnstableFilter(stable_label=0, padding=10).transform(split_data(TEST_DATA3D, 0, 0, index=True)[0])
 stable_test_data_2d = StableFilter(stable_label=0, padding=30).transform(split_data(TEST_DATA2D, 0, 0)[0])
 unstable_test_data_2d = UnstableFilter(stable_label=0, padding=10).transform(split_data(TEST_DATA2D, 0, 0)[0])
 extra = ""
-with open(os.path.join('src', 'throwaway_nn', f'{NN_NAME}.py')) as nnf:
+with open(os.path.join('src', 'nn', f'{NN_NAME}.py')) as nnf:
     extra += nnf.read()
-
-# "loss":"sparse_categorical_crossentropy",
-# "metrics": ['accuracy'],
 
 
 SETTINGS_2D = {
@@ -61,6 +47,9 @@ SETTINGS_2D = {
 
 ModelTest(Encoder_Decoder(18), DATA2D, OPTIONS, **SETTINGS_2D).run(output_path="2d_test_results")
 
+'''
+Commented out since 3D pose estimation is worse due to occlusion
+'''
 # SETTINGS_3D = {
 #     "preprocess": StableFilter(stable_label=0, padding=30),
 #     "max_epochs":MAX_EPOCHS,

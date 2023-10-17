@@ -1,19 +1,24 @@
+import json
 import time
 import pandas as pd
 import os
 import numpy as np
 import sys
 import argparse
-sys.path.append(os.path.join(os.path.dirname(__file__)))
-from vutils import load_settings
 from keras import models, Input, Model
 from keras.callbacks import EarlyStopping
 
 
+
+def load_settings():
+    setting_file = open(os.path.join("assets", "settings.json"))
+    settings = dict(json.load(setting_file))
+    setting_file.close()
+    return settings
+
 settings = load_settings()
 labels2int = {b: a for a, b in enumerate(settings["labels"])}
 
-landmark_indices = [0, 11, 12, 13, 14, 15, 16, 23, 24]
 
 
 def argdict(defaults: dict):
@@ -25,26 +30,6 @@ def argdict(defaults: dict):
 
 def get_filenames(folder_path):
     return list(map(lambda y: os.path.join(folder_path, y), filter(lambda x: x[-4:]=='.csv', os.listdir(folder_path))))
-
-# convert landmarks to only selected landmarks
-def convert(landmarks):
-    result = []
-    for index in landmark_indices:
-        landmark = landmarks[index]
-        """without visibility"""
-        result.extend([landmark.x, landmark.y, landmark.z])
-        """with visibility"""
-        # result.extend([landmark.x, landmark.y, landmark.z, landmark.visibility])
-    return result
-
-
-# offset according to previous frame
-def offset(curr, prev):
-    """without visibility"""
-    result = [a - b for a, b in zip(curr, prev)]
-    """with visibility"""
-    # result = [v[0] - v[1] if i%4!=3 else v[0] for i, v in enumerate(zip(curr, prev))]
-    return result
 
 
 def convert_df_labels(df1, labels2int):
@@ -151,6 +136,10 @@ def group_data(data, group_size, target_function):
 
     return np.array(x_result), np.array(y_result)
 
+def save_float_array(path, arr):
+    with open(path, 'w') as f:
+        for num in arr:
+            f.write(f'{num}\n')
 
 
 
@@ -231,7 +220,6 @@ class ModelOperation:
                     config[k] = v
             current_layer = layer.__class__(**config)(current_layer)
         model = Model(inputs=input_layer, outputs=current_layer)
-        model.summary()
         return model
 
     def train(self, clean_model):
@@ -301,23 +289,27 @@ class ModelTest(ModelOperation):
         self.current_options = [None] * len(self.final_options)
     
     def evaluate(self, model):
-        timesteps = self.params.get("timesteps")
-        x_test_1, y_test_1 = group_data(self.test_data[0], timesteps, self.model_class.target_function)
-        results_1 = model.predict(x_test_1)
-        mse_arr_1 = [np.mean((v1 - v2)**2) for v1, v2 in zip(y_test_1, results_1)]
-        vector_size = list(self.params['layer1'].values())[0]
-        prefix = self.output_name+'-'+str(len(os.listdir("losses"))).zfill(2)+'-'+str(vector_size)
-        output_file = os.path.join("losses", prefix+'_1.csv')
-        save_float_array(output_file, mse_arr_1)
-        x_test_2, y_test_2 = group_data(self.test_data[1], timesteps, self.model_class.target_function)
-        results_2 = model.predict(x_test_2)
-        mse_arr_2 = [np.mean((v1 - v2)**2) for v1, v2 in zip(y_test_2, results_2)]
-        output_file = os.path.join("losses", prefix+'_2.csv')
-        save_float_array(output_file, mse_arr_2)
+        '''
+        This function is used to retrieve testing losses for 
+        stable and unstable frames for each model trains
+        '''
+        # timesteps = self.params.get("timesteps")
+        # x_test_1, y_test_1 = group_data(self.test_data[0], timesteps, self.model_class.target_function)
+        # results_1 = model.predict(x_test_1)
+        # mse_arr_1 = [np.mean((v1 - v2)**2) for v1, v2 in zip(y_test_1, results_1)]
+        # vector_size = list(self.params['layer1'].values())[0]
+        # prefix = self.output_name+'-'+str(len(os.listdir("losses"))).zfill(2)+'-'+str(vector_size)
+        # output_file = os.path.join("losses", prefix+'_1.csv')
+        # save_float_array(output_file, mse_arr_1)
+        # x_test_2, y_test_2 = group_data(self.test_data[1], timesteps, self.model_class.target_function)
+        # results_2 = model.predict(x_test_2)
+        # mse_arr_2 = [np.mean((v1 - v2)**2) for v1, v2 in zip(y_test_2, results_2)]
+        # output_file = os.path.join("losses", prefix+'_2.csv')
+        # save_float_array(output_file, mse_arr_2)
+        pass
 
     def process_options(self):
         self.final_data = list(self.raw_data)
-
         self.params = {}
         for i in range(len(self.layer_options)):
             self.layer_options[i] = None
@@ -370,15 +362,15 @@ class ModelTest(ModelOperation):
         ]
         print()
         model = self.build()
-        # model.summary()
+        model.summary()
         train_results = []
-        # labels = ["round", "epochs", "train", "valid", "test"]
-        # print("{:>8} {:>8} {:>8} {:>8} {:>8}".format(*labels))
+        labels = ["round", "epochs", "train", "valid", "test"]
+        print("{:>8} {:>8} {:>8} {:>8} {:>8}".format(*labels))
         for i in range(self.num_train_per_config):
             record = self.train(model)
             record = list(record[:-1]) + list(record[-1])
             train_results.append(record)
-            # print("{:8} {:8.0f} {:8.4f} {:8.4f} {:8.4f}".format(i, *record))
+            print("{:8} {:8.0f} {:8.4f} {:8.4f} {:8.4f}".format(i, *record))
         record = [sum(i) / len(i) for i in zip(*train_results)]
         print(("{:>8} {:8.0f}"+" {:8.4f}"*(len(record)-1)).format("avg", *record))
         self.history.append(
@@ -388,68 +380,3 @@ class ModelTest(ModelOperation):
         print("-----------------------------------------------------------------\n")
 
 
-class ModelTrain(ModelOperation):
-    def __init__(self, model_class, data, options, *args, **kwargs):
-        super().__init__(model_class=model_class, data=data, *args, **kwargs)
-        for name, param in options.items():
-            self.params[name] = param
-
-        option = self.params.get("preprocess")
-        self.final_data = list(self.raw_data)
-        if option is not None:
-            for i in range(3):
-                if self.test_data and i==2: continue
-                self.final_data[i] = option.transform(self.final_data[i]) 
-        for i in range(3):
-            self.final_data[i] = group_data(
-                self.final_data[i], self.params.get("timesteps"), self.model_class.target_function
-            )
-
-    def run(self):
-        print("=================================================================")
-        [
-            print(f"{name:12}: {self.params.get(name) or 'No Change'}")
-            for name in self.params.keys()
-        ]
-        print()
-        model = self.build()
-        train_results = []
-        # labels = ["round", "epochs", "train", "valid", "test"]
-        # print("{:>8} {:>8} {:>8} {:>8} {:>8}".format(*labels))
-        models = []
-        # for i in range(self.num_train_per_config):
-        record = self.train(model)
-        train_results.append(record)
-        print(record)
-            # print("{:8} {:8.0f} {:8.4f} {:8.4f} {:8.4f}".format(i, *record))
-            # models.append(self.model)
-        try:
-            # number = int(input("Enter the round number to save model: "))
-            # self.save_model(models[number], self.epochs_record)
-            self.save_model(self.model, self.epochs_record)
-        except Exception as e:
-            print(e)
-            print("Model not saved.")
-        print("-----------------------------------------------------------------\n")
-
-
-    def save_model(self, model, record):
-        join = os.path.join
-        model_path = join("model", str(int(time.time())))
-        if not os.path.exists(model_path):
-            os.mkdir(model_path)
-        models.save_model(model, join(model_path, 'model.h5'))
-        output_path = join(model_path, 'history.csv')
-        pd.DataFrame(data=record).to_csv(output_path)
-        with open(join(model_path, 'info.txt'), 'w') as f:
-            # labels = ["epochs", "train", "valid", "test"]
-            # f.write("{:>8} {:>8} {:>8} {:>8}\n".format(*labels))
-            # f.write("{:8.0f} {:8.4f} {:8.4f} {:8.4f}\n\n".format(*record))
-            [f.write(f'{str(k)}: {str(v)}\n') for k, v in self.params.items()]
-        print(f"Model saved to <{model_path}>.")
-
-
-def save_float_array(path, arr):
-    with open(path, 'w') as f:
-        for num in arr:
-            f.write(f'{num}\n')
