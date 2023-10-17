@@ -52,6 +52,7 @@ class RemoveVisibility(Preprocessor):
     def __str__(self):
         return "Remove Visibility"
 
+
 class Balancer(Preprocessor):
     def __init__(self, threshold, ratio):
         self.unlabeled = 3
@@ -69,7 +70,7 @@ class Balancer(Preprocessor):
         index = 0
         while index < len(x):
             if y[index] == self.unlabeled:
-                index+=1
+                index += 1
                 continue
             if y[index] == label:
                 count += 1
@@ -85,20 +86,20 @@ class Balancer(Preprocessor):
             if count >= self.threshold:
                 count = 0
                 label = None
-                index+=1
+                index += 1
                 while index < len(x):
                     if y[index] == label:
-                        index+=1
+                        index += 1
                         x_temp.append(x[index])
                         y_temp.append(y[index])
                     else:
                         break
-                x_result.extend(x_temp[::self.ratio])
-                y_result.extend(y_temp[::self.ratio])
+                x_result.extend(x_temp[:: self.ratio])
+                y_result.extend(y_temp[:: self.ratio])
                 x_temp = []
                 y_temp = []
             index += 1
-        
+
         if len(x_temp):
             x_result.extend(x_temp)
             y_result.extend(y_temp)
@@ -108,6 +109,7 @@ class Balancer(Preprocessor):
     def __str__(self):
         return "Balance Input"
 
+
 class Augmentation(Balancer):
     def __init__(self):
         super().__init__(200, 50)
@@ -116,29 +118,28 @@ class Augmentation(Balancer):
         x, y = data
         most_common = Counter(y).most_common()[0][0]
         index = 0
-        padding = self.threshold//self.ratio
+        padding = self.threshold // self.ratio
         x_result = []
         y_result = []
         while index < len(x):
-            if y[index]!=most_common:
+            if y[index] != most_common:
                 start = max(0, index - padding)
                 end = start + 1
-                while end < len(x) and y[end]!=most_common:
+                while end < len(x) and y[end] != most_common:
                     end += 1
-                end = min(len(x)-1, end + padding)
-                x_result.extend(x[start:end+1])
-                y_result.extend(y[start:end+1])
+                end = min(len(x) - 1, end + padding)
+                x_result.extend(x[start : end + 1])
+                y_result.extend(y[start : end + 1])
                 index = end
             index += 1
         return x_result, y_result
 
 
-    
 class Jitter(Augmentation):
     def transform(self, data):
         data = super().transform(data)
         x_result, y_result = [], []
-        if len(data[0])==0:
+        if len(data[0]) == 0:
             return data
         x, y = self._get_minority(data)
         for i in range(2):
@@ -153,6 +154,7 @@ class Jitter(Augmentation):
     def __str__(self):
         return "Jitter"
 
+
 class StableFilter(Preprocessor):
     def __init__(self, stable_label, padding):
         self.stable_label = stable_label
@@ -162,23 +164,23 @@ class StableFilter(Preprocessor):
         x_result = []
         x, y = data
         n = len(x)
-        forward, backward = [0]*n, [0]*n
+        forward, backward = [0] * n, [0] * n
         f_count, b_count = 0, 0
         for i in range(n):
-            if y[i]!=self.stable_label:
+            if y[i] != self.stable_label:
                 forward[i] = 1
                 f_count = self.padding
             elif f_count > 0:
                 forward[i] = 1
                 f_count -= 1
-            if y[n-i-1]!=self.stable_label:
-                backward[n-i-1] = 1
+            if y[n - i - 1] != self.stable_label:
+                backward[n - i - 1] = 1
                 b_count = self.padding
             elif b_count > 0:
-                backward[n-i-1] = 1
+                backward[n - i - 1] = 1
                 b_count -= 1
         for i in range(n):
-            if forward[i]==1 or backward[i]==1:
+            if forward[i] == 1 or backward[i] == 1:
                 pass
             else:
                 x_result.append(x[i])
@@ -197,23 +199,23 @@ class UnstableFilter(Preprocessor):
         x_result = []
         x, y = data
         n = len(x)
-        forward, backward = [0]*n, [0]*n
+        forward, backward = [0] * n, [0] * n
         f_count, b_count = 0, 0
         for i in range(n):
-            if y[i]!=self.stable_label:
+            if y[i] != self.stable_label:
                 forward[i] = 1
                 f_count = self.padding
             elif f_count > 0:
                 forward[i] = 1
                 f_count -= 1
-            if y[n-i-1]!=self.stable_label:
-                backward[n-i-1] = 1
+            if y[n - i - 1] != self.stable_label:
+                backward[n - i - 1] = 1
                 b_count = self.padding
             elif b_count > 0:
-                backward[n-i-1] = 1
+                backward[n - i - 1] = 1
                 b_count -= 1
         for i in range(n):
-            if forward[i]==1 or backward[i]==1:
+            if forward[i] == 1 or backward[i] == 1:
                 x_result.append(x[i])
             else:
                 pass

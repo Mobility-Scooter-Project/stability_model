@@ -3,11 +3,9 @@ import time
 import pandas as pd
 import os
 import numpy as np
-import sys
 import argparse
 from keras import models, Input, Model
 from keras.callbacks import EarlyStopping
-
 
 
 def load_settings():
@@ -16,20 +14,26 @@ def load_settings():
     setting_file.close()
     return settings
 
+
 settings = load_settings()
 labels2int = {b: a for a, b in enumerate(settings["labels"])}
 
 
-
 def argdict(defaults: dict):
-    parser = argparse.ArgumentParser(prog='Stability Model Testing')
+    parser = argparse.ArgumentParser(prog="Stability Model Testing")
     for k, v in defaults.items():
-        parser.add_argument(f'--{k}', type=type(v), default=v)
+        parser.add_argument(f"--{k}", type=type(v), default=v)
     args = parser.parse_args()
     return args
 
+
 def get_filenames(folder_path):
-    return list(map(lambda y: os.path.join(folder_path, y), filter(lambda x: x[-4:]=='.csv', os.listdir(folder_path))))
+    return list(
+        map(
+            lambda y: os.path.join(folder_path, y),
+            filter(lambda x: x[-4:] == ".csv", os.listdir(folder_path)),
+        )
+    )
 
 
 def convert_df_labels(df1, labels2int):
@@ -106,13 +110,9 @@ def split_data_without_label(df, valid_size, test_size):
 def split_data(DATA, VALID_RATIO, TEST_RATIO, index=False):
     DBs = None
     if index:
-        DBs = [
-            pd.read_csv(name, index_col=0) for name in DATA
-        ]
+        DBs = [pd.read_csv(name, index_col=0) for name in DATA]
     else:
-        DBs = [
-            pd.read_csv(name) for name in DATA
-        ]
+        DBs = [pd.read_csv(name) for name in DATA]
     DB = pd.concat(DBs, axis=0, ignore_index=True, sort=False)
     DB = convert_df_labels(DB, labels2int)
 
@@ -136,11 +136,11 @@ def group_data(data, group_size, target_function):
 
     return np.array(x_result), np.array(y_result)
 
-def save_float_array(path, arr):
-    with open(path, 'w') as f:
-        for num in arr:
-            f.write(f'{num}\n')
 
+def save_float_array(path, arr):
+    with open(path, "w") as f:
+        for num in arr:
+            f.write(f"{num}\n")
 
 
 class ModelOperation:
@@ -154,19 +154,19 @@ class ModelOperation:
         early_stop_valid_patience=10,
         early_stop_train_patience=5,
         num_train_per_config=10,
-        loss='mse',
-        metrics=['mse'],
+        loss="mse",
+        metrics=["mse"],
         verbose=0,
         test_data=None,
         output_name=None,
         extra="",
-        preprocess=None
+        preprocess=None,
     ):
         self.max_epochs = max_epochs
         self.early_stop_valid_patience = early_stop_valid_patience
         self.early_stop_train_patience = early_stop_train_patience
         self.num_train_per_config = num_train_per_config
-        self.loss= loss
+        self.loss = loss
         self.metrics = metrics
         self.verbose = verbose
 
@@ -184,14 +184,13 @@ class ModelOperation:
         self.output_name = output_name
         self.extra = extra
 
-
         self.defalut_params = {
             "batchsize": 16,
             "timesteps": 32,
             "optimizer": "adam",
             "preprocess": preprocess,
             "loss": "mae",
-            "metrics": "mae"
+            "metrics": "mae",
         }
 
         self.model = None
@@ -226,7 +225,9 @@ class ModelOperation:
         (x_train, y_train), (x_valid, y_valid), (x_test, y_test) = self.final_data
         model = models.clone_model(clean_model)
         model.compile(
-            optimizer=self.params.get("optimizer"), loss=self.params.get("loss"), metrics=[self.params.get("metrics")]
+            optimizer=self.params.get("optimizer"),
+            loss=self.params.get("loss"),
+            metrics=[self.params.get("metrics")],
         )
         batchsize = self.params.get("batchsize")
         history = model.fit(
@@ -262,10 +263,16 @@ class ModelOperation:
         if self.test_data is not None:
             timesteps = self.params.get("timesteps")
             for test in self.test_data:
-                x_test, y_test = group_data(test, timesteps, self.model_class.target_function)
-                test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
-        elif len(x_test)>0:
-            test_loss.append(model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0])
+                x_test, y_test = group_data(
+                    test, timesteps, self.model_class.target_function
+                )
+                test_loss.append(
+                    model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0]
+                )
+        elif len(x_test) > 0:
+            test_loss.append(
+                model.evaluate(x_test, y_test, batch_size=batchsize, verbose=0)[0]
+            )
         self.model = model
         self.evaluate(model)
         return epochs, loss, val_loss, test_loss
@@ -287,12 +294,12 @@ class ModelTest(ModelOperation):
             if not found:
                 self.final_options.append((name1, [param1]))
         self.current_options = [None] * len(self.final_options)
-    
+
     def evaluate(self, model):
-        '''
-        This function is used to retrieve testing losses for 
+        """
+        This function is used to retrieve testing losses for
         stable and unstable frames for each model trains
-        '''
+        """
         # timesteps = self.params.get("timesteps")
         # x_test_1, y_test_1 = group_data(self.test_data[0], timesteps, self.model_class.target_function)
         # results_1 = model.predict(x_test_1)
@@ -318,7 +325,8 @@ class ModelTest(ModelOperation):
             option = options[option_idx]
             if name == "preprocess" and option is not None:
                 for i in range(3):
-                    if self.test_data and i==2: continue
+                    if self.test_data and i == 2:
+                        continue
                     self.final_data[i] = option.transform(self.final_data[i])
             if name[:5] == "layer":
                 layer_number = int(name[5:])
@@ -326,23 +334,31 @@ class ModelTest(ModelOperation):
             self.params[name] = option
         timesteps = self.params.get("timesteps")
         for i in range(3):
-            self.final_data[i] = group_data(self.final_data[i], timesteps, self.model_class.target_function)
+            self.final_data[i] = group_data(
+                self.final_data[i], timesteps, self.model_class.target_function
+            )
 
     def run(self, output_path):
         self.history = []
         self.test(0)
         output_file = os.path.join(output_path, str(int(time.time())) + ".csv")
         if self.output_name:
-            output_file = os.path.join(output_path, str(len(os.listdir(output_path))).zfill(2)+'-'+self.output_name+'.csv')
+            output_file = os.path.join(
+                output_path,
+                str(len(os.listdir(output_path))).zfill(2)
+                + "-"
+                + self.output_name
+                + ".csv",
+            )
         pd.DataFrame(
             data=self.history,
             columns=list(next(zip(*self.final_options)))
-                + ["avg_epochs", "avg_loss", "avg_valid_loss"]
-                + (["avg_test_loss"] if len(self.raw_data[2][0]) else [])
-                + [f"avg_test_loss_{i}" for i,v in enumerate(self.test_data or [])],
+            + ["avg_epochs", "avg_loss", "avg_valid_loss"]
+            + (["avg_test_loss"] if len(self.raw_data[2][0]) else [])
+            + [f"avg_test_loss_{i}" for i, v in enumerate(self.test_data or [])],
         ).to_csv(output_file)
-        with open(output_file, 'a') as of:
-            of.write('\n')
+        with open(output_file, "a") as of:
+            of.write("\n")
             of.write(self.extra)
 
     def test(self, option_idx):
@@ -372,11 +388,9 @@ class ModelTest(ModelOperation):
             train_results.append(record)
             print("{:8} {:8.0f} {:8.4f} {:8.4f} {:8.4f}".format(i, *record))
         record = [sum(i) / len(i) for i in zip(*train_results)]
-        print(("{:>8} {:8.0f}"+" {:8.4f}"*(len(record)-1)).format("avg", *record))
+        print(("{:>8} {:8.0f}" + " {:8.4f}" * (len(record) - 1)).format("avg", *record))
         self.history.append(
             [self.params.get(name) or "No Change" for name in self.params.keys()]
             + record
         )
         print("-----------------------------------------------------------------\n")
-
-

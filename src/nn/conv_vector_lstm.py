@@ -1,11 +1,14 @@
 from keras import Input, layers, Model
+
 TIMESTEPS = 64
 VECTOR_SIZE = 10
+
+
 class Encoder_Decoder:
     def __init__(self, number_of_features):
         inputs = Input(shape=(TIMESTEPS, number_of_features))
-        x = layers.Conv1D(9, 3, padding='valid')(inputs)
-        x = layers.Conv1D(4, 3, padding='valid')(x)
+        x = layers.Conv1D(9, 3, padding="valid")(inputs)
+        x = layers.Conv1D(4, 3, padding="valid")(x)
         x = layers.Flatten()(x)
         x = layers.Dense(VECTOR_SIZE)(x)
         repeat = layers.RepeatVector(TIMESTEPS)(x)
@@ -16,11 +19,12 @@ class Encoder_Decoder:
         x, y = data
         return x
 
+
 OPTIONS = {
     "batchsize": [40],
     "timesteps": [TIMESTEPS],
     "optimizer": ["adam"],
-    "loss": ['mse'],
-    "metrics": ['mse'],
+    "loss": ["mse"],
+    "metrics": ["mse"],
     "layer4": [{"filters": i} for i in [4, 8, 16, 32, 64, 128]],
 }

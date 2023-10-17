@@ -3,6 +3,7 @@ from keras import Input, layers, Model
 TIMESTEPS = 64
 VECTOR_SIZE = 10
 
+
 class Encoder_Decoder:
     def __init__(self, number_of_features):
         inputs = Input(shape=(TIMESTEPS, number_of_features))
@@ -19,7 +20,7 @@ OPTIONS = {
     "batchsize": [40],
     "timesteps": [TIMESTEPS],
     "optimizer": ["adam"],
-    "loss": ['mse'],
-    "metrics": ['mse'],
+    "loss": ["mse"],
+    "metrics": ["mse"],
     "layer1": [{"filters": i} for i in [1, 2, 4, 8]],
 }
