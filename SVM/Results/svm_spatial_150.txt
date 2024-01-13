@@ -1,0 +1,3 @@
+Parameters: c=10, degree=1, kernel=rbf, decision function shape=ovo
+Training accuracy: 0.87
+Testing accuracy: 0.79
