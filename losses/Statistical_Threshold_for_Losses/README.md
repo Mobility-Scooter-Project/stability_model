@@ -26,4 +26,4 @@ In main():
 3. Change test_stable_m1 and test_stable_m2 to the directories of the testing data with "stable" labels for model 1 and model 2, respectively.
 4. Change test_unstable_m1 and test_unstable_m2 to the directories of the testing data with "unstable" labels for model 1 and model 2, respectively.
 5. (Optional) standardDeviations determines the number of standard deviations above the mean to classify data as "unstable". You can change this value to increase or decrease the upper threshold. 2 standard deviations have already been chosen as a start.
-6. Run binClass_statsThreshold.py. Code outputs confusion matrices to files, one for each model.
+6. Run binClass_statsThreshold.py. Code outputs a confusion matrix for each model in the "Results" folder with "_#SD" in the file name to specify the number of standard deviations used.
