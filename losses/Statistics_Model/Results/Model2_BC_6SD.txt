@@ -1,0 +1,11 @@
+Model 2 Binary Classification
+Upper threshold is 6 standard deviations above the average loss
++-----------------+--------------------+--------------------+
+|                 | Predicted Positive | Predicted Negative |
++-----------------+--------------------+--------------------+
+| Actual Positive |        3759        |        122         |
+| Actual Negative |         3          |         4          |
++-----------------+--------------------+--------------------+
+Accuracy: 0.9678497942386831
+Precision: 0.9685648028858541
+Recall: 0.9992025518341308
