@@ -1,3 +1,0 @@
-Parameters: c=2, degree=2, kernel=poly, decision function shape=ovo
-Training accuracy: 0.88
-Testing accuracy: 0.81
