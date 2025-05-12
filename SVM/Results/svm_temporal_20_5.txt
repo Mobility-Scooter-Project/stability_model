@@ -1,4 +1,0 @@
-Frame sequence length: 20, sampling rate: 1 in 5
-Parameters: c=1, degree=1, kernel=linear, decision function shape=ovo
-Training accuracy: 0.965445
-Testing accuracy: 0.994962
