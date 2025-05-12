@@ -21,6 +21,7 @@ def classify_value(value, upperLimit):
         return "stable" 
 
 
+
 def confusion_matrix(tp, fp, fn, tn):
     """
     Return a neatly formatted confusion matrix for printing or writing to a file
@@ -41,6 +42,7 @@ def confusion_matrix(tp, fp, fn, tn):
     return conf_mat.get_string()
 
 
+
 def testThresholds(trainingDataList, numOfSD, stableData, unstableData, outputFile, thresholdFile, modelName):
     """
     Classify stable and unstable test sets as "stable" or "unstable".
@@ -55,6 +57,10 @@ def testThresholds(trainingDataList, numOfSD, stableData, unstableData, outputFi
     outputFile (str): Desired name of output file for results
     thresholdFile (str): Desired name of file to write threshold
     modelName (str): Name of model and desired name for results in output file
+    
+    Return:
+    None
+    Write metrics to a file
     """
 
     # Iterate through list of training datasets to combine all into one large training dataframe
@@ -89,23 +95,12 @@ def testThresholds(trainingDataList, numOfSD, stableData, unstableData, outputFi
     test_stableDF['Classifications'] = test_stableDF.map(lambda x: classify_value(x, upperBound))
     # FP = num of unstable classifications for stable test set
     FP = test_stableDF['Classifications'].value_counts().get('unstable', 0)
-    
-    # REMOVE
-    # # FN = num of unstable classifications for stable test set
-    # FN = test_stableDF['Classifications'].value_counts().get('unstable', 0)
-
-
 
 
     # Classify unstable test set
     test_unstableDF['Classifications'] = test_unstableDF.map(lambda x: classify_value(x, upperBound))
     # FN = num of stable classes for UNstable test set
     FN = test_unstableDF['Classifications'].value_counts().get('stable', 0)
-
-    # REMOVE
-    # # FP = num of stable classes for UNstable test set
-    # FP = test_unstableDF['Classifications'].value_counts().get('stable', 0)
-
 
 
     # Get total number of true stable labels from size of stable test set
@@ -116,9 +111,6 @@ def testThresholds(trainingDataList, numOfSD, stableData, unstableData, outputFi
     # Calc TP and TN from number of true labels - FP or FN
     TP = numOfTrueUnstable - FN
     TN = numOfTrueStable - FP
-    
-    # TP = numOfTrueStable - FN
-    # TN = numOfTrueUnstable - FP
 
     # Calc accuracy, precision, recall, and F1
     accuracy = (TP + TN)/(TP+TN+FP+FN)
@@ -137,6 +129,8 @@ def testThresholds(trainingDataList, numOfSD, stableData, unstableData, outputFi
         file.write("Precision: " + str(precision) + "\n")
         file.write("Recall: " + str(recall) + "\n")
         file.write("F1 Score: " + str(f1) + "\n")
+
+
 
 def main():
     standardDeviations = 0
