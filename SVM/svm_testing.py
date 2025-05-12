@@ -2,6 +2,7 @@ from joblib import load
 import pandas as pd
 import numpy as np
 
+# READING DATA AND INPUT PARAMETERS
 def read_params(paramsFile):
     """
     Read the parameters for the input modifying functions
@@ -10,8 +11,8 @@ def read_params(paramsFile):
     paramsFile (str): Path of file with threshold number
 
     Return:
-    int: frameSeq as an int
-    int: samplingRate as an int
+    frameSeq (int): number of frames in a sequence (flattened together to make 1 sample for the SVM)
+    samplingRate (int):  rate of samples to collect
     """
 
     # Read file
@@ -20,6 +21,7 @@ def read_params(paramsFile):
             frameSeq, samplingRate = line.strip().split(',')
 
     return int(frameSeq), int(samplingRate)
+
 
 
 def read_data(coordinates_arr, samplingRate):
@@ -34,8 +36,17 @@ def read_data(coordinates_arr, samplingRate):
     df (DataFrame): Newly converted coordinates dataframe
     """
 
+    # Convert input to numpy array, if it is not already
+    coordinates_arr = np.asarray(coordinates_arr, dtype=float)
+    
+    # Remove NaN data and string headers
+    coordinates_arr = coordinates_arr[~np.isnan(coordinates_arr).any(axis=1)]
+    
+    # Skip <samplingRate> rows and convert data to df
     df = pd.DataFrame(coordinates_arr[::samplingRate])
+
     return df
+
 
 
 
@@ -51,7 +62,7 @@ def round_df(df, frameSeq):
     Return:
     df (DataFrame): "Rounded" df; same as passed df parameter
     """
-
+    
     # If the dataframe is not a multiple of frameSeq, just delete the last incomplete group
     if (len(df)%frameSeq != 0):
         rowsToDelete = len(df)%frameSeq
@@ -60,13 +71,14 @@ def round_df(df, frameSeq):
     return df
 
 
+
 def flatten_input(df, frameSeq):
     """
     Flatten input for ML model w/ column-wise concatenation; demonstrates temporal change (how EACH COORDINATE changes over time)
     
     Parameters:
     df (DataFrame): dataframe to flatten
-    frameSeq (number): length of desired frame sequence
+    frameSeq (number): length of frame sequence
 
     Return:
     df_flattened (numPy arr): flattened df
@@ -84,11 +96,9 @@ def flatten_input(df, frameSeq):
     # Convert pandas series to numpy arrays
     df_flattened = np.array(df_flattened.tolist())
 
-    # Write flattened df to CSV, if desired
-    # df_flattened.tofile("./flat_data.csv", sep=',')
-
     # Return flattened feat matrix
     return df_flattened
+
 
 
 def modify_input_data(df, frameSeq):
@@ -125,8 +135,8 @@ def convert_to_hashmap(coor_arr, predictions_arr):
     Hashmap: Coordinates are keys and predictions are values
     """
     
-    # Decode classes; 1 = stable, 0 = unstable
-    prediction_strings = np.where(predictions_arr == 1, 'stable', 'unstable')
+    # Decode classes; 0 = stable, 1 = unstable
+    prediction_strings = np.where(predictions_arr == 0, 'stable', 'unstable')
 
     # Combine coordinate and prediction arrays into one hashmap
     hashmap = {tuple(key): value for key, value in zip(coor_arr, prediction_strings)}
@@ -134,6 +144,8 @@ def convert_to_hashmap(coor_arr, predictions_arr):
     return hashmap
 
 
+
+# CLASSIFY DATA WITH SVM
 def classify_pose_data(coordinates_arr, svmFile, parametersFile):
     """
     Make predictions ("stable"/"unstable") on given keypoint coordinates
@@ -146,7 +158,7 @@ def classify_pose_data(coordinates_arr, svmFile, parametersFile):
     Return: 
     Hashmap: Coordinates are groups of length <frameSeq> and each group is mapped to a prediction ("stable" or "unstable")
     """
-    # Load variables, data, and SVM
+    # Load parameters, data, and SVM
     frameSeq, samplingRate = read_params(parametersFile)
     testingDF = read_data(coordinates_arr, samplingRate)
     svm_model = load(svmFile)
@@ -163,16 +175,21 @@ def classify_pose_data(coordinates_arr, svmFile, parametersFile):
     return final_hashmap
 
 
+
 def main():
+    # Example of a manually inputted 2D array (must be 18 columns for each coordinate and at least frameSeq x samplingRate as long)
     sample_arr = [
-        [1, 2, 3],
-        [1, 2, 3],
-        [1, 2, 3]
+        [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8],
+        [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8],
+        ...
     ]
-    sample_arr2 = np.genfromtxt('sample.csv', delimiter=',')
 
-    classify_pose_data(sample_arr2, "./svm.joblib", "./svm_parameters.txt")
-
+    # Example of reading data from CSV and converting it to a 2D numpy array for the SVM input
+    sample_arr2 = np.genfromtxt('./sampleTestingData/testingSample.csv', delimiter=',')
+    
+    # Can use sample_arr, sample_arr2, a different manually inputted array, or other CSV file
+    output = classify_pose_data(sample_arr2, "./svm.joblib", "./frameSequence-samplingRate.txt")
+    print(output)
 
 if __name__ == "__main__":
     main()
