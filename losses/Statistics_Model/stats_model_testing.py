@@ -6,7 +6,7 @@ def read_threshold(thresholdFile):
     Read the upper threshold for the statistics model from a file
     
     Parameters:
-    str: Path of file with threshold number
+    thresholdFile (str): Path of file with threshold number
 
     Return:
     float: threshold as a float
@@ -50,8 +50,8 @@ def convert_to_hashmap(losses_df, classes_df):
     (Optional) convert the hashmap to a string
 
     Parameters:
-    DataFrame: Losses
-    DataFrame: Classifictions for losses
+    losses_df (DataFrame): Losses
+    classes_df (DataFrame): Classifictions for losses
 
     Return:
     Hashmap: Losses are keys and classes are values
@@ -73,8 +73,8 @@ def classify_losses(losses_arr, thresholdFile):
     Classify an array of losses based on an upper threshold.
 
     Parameters:
-    arr[]: Losses array
-    str: Path to file with threshold
+    losses_arr (arr[]): Losses array
+    thresholdFile (str): Path to file with threshold
 
     Return:
     Hashmap: Losses-classifications hashmap
