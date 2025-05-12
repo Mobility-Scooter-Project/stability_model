@@ -1,0 +1,12 @@
+Model 2 Binary Classification
+Upper threshold is 3 standard deviations above the average loss
++-----------------+--------------------+------------------+
+|                 | Predicted Unstable | Predicted Stable |
++-----------------+--------------------+------------------+
+| Actual Unstable |         13         |       113        |
+|  Actual Stable  |         22         |       3740       |
++-----------------+--------------------+------------------+
+Accuracy: 0.9652777777777778
+Precision: 0.37142857142857144
+Recall: 0.10317460317460317
+F1 Score: 0.16149068322981366
