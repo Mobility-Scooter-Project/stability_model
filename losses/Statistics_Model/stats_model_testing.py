@@ -25,6 +25,7 @@ def read_threshold(thresholdFile):
             print("Error: Cannot read a number from this file")
 
 
+
 def classify_value(value, upperLimit):
     """
     Classify value as "stable" or "unstable" based on limits.
@@ -44,6 +45,7 @@ def classify_value(value, upperLimit):
         return "stable" 
     
 
+
 def convert_to_hashmap(losses_df, classes_df):
     """
     Merge the losses and corresponding classifications dataframes into a hashmap
@@ -57,15 +59,18 @@ def convert_to_hashmap(losses_df, classes_df):
     Hashmap: Losses are keys and classes are values
     """
 
+    # Merge losses (features) and classes into 1 df
     merged_df = pd.concat([losses_df, classes_df], axis=1)
 
+    # Convert df to hashmap
     hashmap = merged_df.set_index("Losses").to_dict()["Classes"]
 
-    # # Convert hashmap to string
+    # Convert hashmap to string, if desired
     # hashmap_str = json.dumps(hashmap)
     # print(hashmap_str)
 
     return hashmap
+
 
 
 def classify_losses(losses_arr, thresholdFile):
@@ -100,6 +105,8 @@ def classify_losses(losses_arr, thresholdFile):
 def main():
     # Input sample loss values
     sample_arr = []
+
+    # Get threshold value from txt file (produced by training stats model)
     thresholdFile = "threshold_m1.txt"
 
     return classify_losses(sample_arr, thresholdFile)
